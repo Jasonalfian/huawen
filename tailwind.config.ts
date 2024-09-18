@@ -1,3 +1,4 @@
+import { yellow } from "@mui/material/colors";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -11,6 +12,11 @@ const config: Config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        theme: {
+          red: "#c50d2a",
+          yellow: "#fbab08",
+          cream: "#fefcf6",
+        },
       },
     },
   },

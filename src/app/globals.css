@@ -5,6 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --header-height: 80px;
+  --marquee-height: 1.5rem;
+  --footer-height: 1.5rem;
 }
 
 /* @media (prefers-color-scheme: dark) {

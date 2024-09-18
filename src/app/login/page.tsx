@@ -1,3 +1,4 @@
+import Image from "next/image";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 
@@ -16,7 +17,6 @@ export default function Home() {
         id="outlined-basic"
         label="password"
         variant="outlined"
-        type="password"
       />
 
       <Button className="mt-2">Submit</Button>
