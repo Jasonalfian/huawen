@@ -13,9 +13,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         theme: {
-          red: "#c50d2a",
-          yellow: "#fbab08",
-          cream: "#fefcf6",
+          red: "var(--theme-red)",
+          yellow: "var(--theme-yellow)",
+          cream: "var(--theme-cream)",
         },
       },
     },

@@ -27,6 +27,7 @@ export default function MenuBarMobile({ setter }: MenuBarMobileProps) {
           alt="Company Logo"
           width={120}
           height={120}
+          priority
         />
       </Link>
       <Link className="text-3xl flex" href="/login">

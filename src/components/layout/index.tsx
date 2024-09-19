@@ -26,7 +26,9 @@ export default function Layout({
           <MenuBarMobile setter={setShowSidebar} />
           <Sidebar show={showSidebar} setter={setShowSidebar} />
           <div className="flex flex-col flex-grow w-screen md:w-full min-h-screen">
-            {children}
+            <div className="relative flex flex-col mt-[80px] p-6">
+              {children}
+            </div>
           </div>
         </div>
       </div>
