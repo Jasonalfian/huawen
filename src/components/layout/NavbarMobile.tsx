@@ -1,27 +1,33 @@
 import React from "react";
 import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Image from "next/image";
+import RightBar from "../shared/RightBar";
 
-type MenuBarMobileProps = {
+type NavbarMobileProps = {
   setter: React.Dispatch<React.SetStateAction<boolean>>;
+  isLandingPage?: boolean;
 };
 
-export default function MenuBarMobile({ setter }: MenuBarMobileProps) {
+export default function NavbarMobile({
+  setter,
+  isLandingPage,
+}: NavbarMobileProps) {
   return (
     <nav
       className={`md:hidden z-20 fixed top-0 left-0 right-0 h-[var(--header-height)] bg-white flex [&>*]:my-auto px-4 border-b-2`}
     >
-      <button
-        className="flex"
-        onClick={() => {
-          setter((oldVal) => !oldVal);
-        }}
-      >
-        <MenuIcon />
-      </button>
-      <Link href="/" className="mx-auto">
+      {!isLandingPage && (
+        <button
+          className="flex"
+          onClick={() => {
+            setter((oldVal) => !oldVal);
+          }}
+        >
+          <MenuIcon fontSize="large" />
+        </button>
+      )}
+      <Link href={isLandingPage ? "/" : "/home"} className="mx-auto">
         <Image
           src="/img/huawen-logo.png"
           alt="Company Logo"
@@ -30,9 +36,7 @@ export default function MenuBarMobile({ setter }: MenuBarMobileProps) {
           priority
         />
       </Link>
-      <Link className="text-3xl flex" href="/login">
-        <AccountCircleIcon />
-      </Link>
+      <RightBar hideAccount={isLandingPage} />
     </nav>
   );
 }

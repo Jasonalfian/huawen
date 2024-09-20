@@ -8,20 +8,38 @@ const LessonCard = () => {
       <LessonInfo />
       <div className="grid md:flex mt-2 gap-4">
         <Link href="/material">
-          <Button sx={{ background: "var(--theme-red)" }} variant="contained">
+          <Button
+            fullWidth
+            sx={{ background: "var(--theme-red)" }}
+            variant="contained"
+          >
             Class Materials
           </Button>
         </Link>
-        <Button sx={{ background: "var(--theme-red)" }} variant="contained">
-          Join Class
-        </Button>
+        <Link href="/homework">
+          <Button
+            fullWidth
+            sx={{ background: "var(--theme-red)" }}
+            variant="contained"
+          >
+            Join Class
+          </Button>
+        </Link>
         <Link href="/evaluation">
-          <Button sx={{ background: "var(--theme-red)" }} variant="contained">
+          <Button
+            fullWidth
+            sx={{ background: "var(--theme-red)" }}
+            variant="contained"
+          >
             Class Evaluation
           </Button>
         </Link>
         <Link href="/homework">
-          <Button sx={{ background: "var(--theme-red)" }} variant="contained">
+          <Button
+            fullWidth
+            sx={{ background: "var(--theme-red)" }}
+            variant="contained"
+          >
             Submit Task
           </Button>
         </Link>
