@@ -1,3 +1,5 @@
+"use client";
+
 import Layout from "@/components/layout";
 import React from "react";
 import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";

@@ -4,6 +4,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { styled } from "@mui/material/styles";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
+import useAuthStore from "@/libs/auth";
 
 type RightBarProps = {
   hideAccount?: boolean;
@@ -11,6 +12,7 @@ type RightBarProps = {
 
 const RightBar = (props: RightBarProps) => {
   const { hideAccount = false } = props;
+  const { logout } = useAuthStore();
   const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
@@ -52,9 +54,9 @@ const RightBar = (props: RightBarProps) => {
                 <Link href="/account/certificate">
                   <p className="p-2 border-b-2">My Certificate</p>
                 </Link>
-                <Link href="/login">
+                <div onClick={logout}>
                   <p className="p-2">Sign Out</p>
-                </Link>
+                </div>
               </div>
             </React.Fragment>
           }
