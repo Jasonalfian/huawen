@@ -1,19 +1,26 @@
+"use client";
+
+import { LessonData } from "@/client/student";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import QueryBuilderOutlinedIcon from "@mui/icons-material/QueryBuilderOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 
-const LessonInfo = () => {
+type LessonInfoProps = {
+  data?: LessonData;
+};
+
+const LessonInfo = ({ data }: LessonInfoProps) => {
   return (
     <>
       <h2 className="text-2xl mb-2">Lesson 1</h2>
       <p>
-        <EventNoteOutlinedIcon /> HSK 4_0001
+        <EventNoteOutlinedIcon /> {data?.class_name ?? "-"}
       </p>
       <p>
-        <QueryBuilderOutlinedIcon /> 01 September 2024 12:00 - 13:30
+        <QueryBuilderOutlinedIcon /> {data?.start_time ?? "-"}
       </p>
       <p>
-        <SchoolOutlinedIcon /> 张老师
+        <SchoolOutlinedIcon /> {data?.teachers ?? "-"}
       </p>
     </>
   );

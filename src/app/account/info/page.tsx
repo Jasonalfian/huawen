@@ -8,8 +8,19 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { Dayjs } from "dayjs";
+import { ProfileData, getProfile } from "@/client/student";
 
 const InfoPage = () => {
+  const [profile, setProfile] = React.useState<ProfileData>();
+
+  React.useEffect(() => {
+    getProfile().then((res) => {
+      if (res.data.data) {
+        setProfile(res.data.data);
+      }
+    });
+  }, []);
+
   const [value, setValue] = React.useState<Dayjs | null>(null);
 
   return (
@@ -23,12 +34,11 @@ const InfoPage = () => {
             <p>Display Picture</p>
           </div>
           <Image
-            src="/img/mock-dp.avif"
+            src={profile?.profile_picture_url ?? ""}
             alt="Display Picture"
             width={200}
             height={200}
             className="rounded-xl"
-            priority
           />
         </div>
 

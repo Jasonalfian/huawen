@@ -1,16 +1,30 @@
 import { create } from "zustand";
 
-// Define the type for your store
-interface AuthStore {
+type LessonInfo = {
+  lesson_name: string;
+  lesson_time: string;
+  teachers: string;
+};
+
+interface GlobalStore {
   token: string | null;
+  lessonInfo: LessonInfo;
   login: (newToken: string) => void;
   logout: () => void;
   initializeToken: () => void;
 }
 
 // Create Zustand store with types
-const useAuthStore = create<AuthStore>((set) => ({
+const useGlobalStore = create<GlobalStore>((set) => ({
   token: null,
+  lessonInfo: {
+    lesson_name: "",
+    lesson_time: "",
+    teachers: "",
+  },
+  setLessonInfo: (lessonInfo: LessonInfo) => {
+    set({ lessonInfo: lessonInfo });
+  },
   login: (newToken) => {
     localStorage.setItem("token", newToken);
     set({ token: newToken });
@@ -33,4 +47,4 @@ const useAuthStore = create<AuthStore>((set) => ({
   },
 }));
 
-export default useAuthStore;
+export default useGlobalStore;

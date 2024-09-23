@@ -3,7 +3,7 @@
 import "./globals.css";
 import { cn } from "@/utils/utils";
 import { fonts } from "@/libs/fonts";
-import useAuthStore from "@/libs/auth";
+import useGlobalStore from "@/libs/global";
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 
@@ -12,7 +12,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { token, initializeToken } = useAuthStore();
+  const { token, initializeToken } = useGlobalStore();
   const [isHomePage, setIsHomePage] = React.useState(false);
 
   React.useEffect(() => {

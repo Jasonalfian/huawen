@@ -6,9 +6,8 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormData, loginFormSchema } from "./schema";
-import useAuthStore from "@/libs/auth";
+import useGlobalStore from "@/libs/global";
 import { postLogin } from "@/client/login";
-import { redirect } from "next/navigation";
 
 const Login = () => {
   const {
@@ -25,19 +24,17 @@ const Login = () => {
     resolver: yupResolver(loginFormSchema),
   });
 
-  const { login } = useAuthStore();
+  const { login } = useGlobalStore();
 
   const onSubmit = handleSubmit((data) => {
     setErrorMessage("");
     postLogin(data)
       .then((res) => {
-        console.log(res.data.token);
         if (res.data?.token) {
           login(res.data.token);
         }
       })
-      .catch((res) => {
-        console.log(res);
+      .catch(() => {
         setErrorMessage("Invalid Credential");
       });
   });

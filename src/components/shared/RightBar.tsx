@@ -4,7 +4,7 @@ import LanguageIcon from "@mui/icons-material/Language";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { styled } from "@mui/material/styles";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
-import useAuthStore from "@/libs/auth";
+import useGlobalStore from "@/libs/global";
 
 type RightBarProps = {
   hideAccount?: boolean;
@@ -12,7 +12,7 @@ type RightBarProps = {
 
 const RightBar = (props: RightBarProps) => {
   const { hideAccount = false } = props;
-  const { logout } = useAuthStore();
+  const { logout } = useGlobalStore();
   const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
