@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Divider from "@mui/material/Divider";
 import { Button, TextField } from "@mui/material";
@@ -31,7 +33,15 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
           expandIcon={<ArrowDropDownIcon />}
           aria-controls="panel2-content"
           id="panel2-header"
-          className="text-2xl font-medium text-black py-2 px-4 border-2 bg-theme-yellow rounded-sm"
+          sx={{
+            fontSize: "1.5rem",
+            fontWeight: 500,
+            color: "black",
+            paddingY: "0.5rem",
+            paddingX: "1rem",
+            backgroundColor: "var(--theme-yellow)",
+            borderRadius: "0.125rem",
+          }}
         >
           <h2>{task.title}</h2>
         </AccordionSummary>
@@ -76,7 +86,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                 multiline
                 rows={2}
                 fullWidth
-                className="mb-4"
+                sx={{ marginBottom: "1rem" }}
               />
               <div className="max-w-max text-black px-10 py-8 border-2 bg-theme-cream rounded-lg">
                 <Button variant="contained" color="primary">
