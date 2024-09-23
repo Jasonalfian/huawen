@@ -6,6 +6,7 @@ import { fonts } from "@/libs/fonts";
 import useGlobalStore from "@/libs/global";
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -45,7 +46,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(`antialiased`, fonts.inter.className)}>
         {isHomePage || token ? (
-          children
+          <>
+            {children}
+            <Toaster />
+          </>
         ) : (
           <div className="w-[100vw] h-[100vh] flex items-center justify-center">
             <GradientCircularProgress />

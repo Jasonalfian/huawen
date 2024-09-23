@@ -39,7 +39,7 @@ const LessonCard = ({ data }: LessonCardProps) => {
             Class Evaluation
           </Button>
         </Link>
-        <Link href="/homework">
+        <Link href={`/task/${data.lesson_id}`}>
           <Button
             fullWidth
             sx={{ background: "var(--theme-red)" }}
