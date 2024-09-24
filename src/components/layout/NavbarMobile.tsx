@@ -34,6 +34,7 @@ export default function NavbarMobile({
           width={120}
           height={120}
           priority
+          style={{ height: "auto", width: "auto" }}
         />
       </Link>
       <RightBar hideAccount={isLandingPage} />

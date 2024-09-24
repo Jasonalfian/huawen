@@ -68,6 +68,11 @@ export type TaskData = {
   visible: number;
 };
 
+export type SubmitTaskPayload = {
+  file: File;
+  description: string;
+};
+
 type Score = {
   aspect: string;
   score: string;
@@ -135,5 +140,21 @@ export const getTaskScore = (taskId: string) => {
   return axios({
     method: "get",
     url: `student/getResult.php?task_id=${taskId}`,
+  });
+};
+
+export const submitTask = (data: FormData, taskId: string) => {
+  return axios({
+    method: "post",
+    url: `/student/submitTask.php?task_id=${taskId}`,
+    data,
+  });
+};
+
+export const postDisplayPicture = (data: FormData) => {
+  return axios({
+    method: "post",
+    url: `/student/uploadProfile.php`,
+    data,
   });
 };

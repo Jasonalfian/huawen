@@ -8,7 +8,17 @@ import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import Link from "next/link";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { TaskData, TaskScoreData, getTaskScore } from "@/client/student";
+import {
+  TaskData,
+  TaskScoreData,
+  getTaskScore,
+  submitTask,
+} from "@/client/student";
+import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
+import toast from "react-hot-toast";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 type TaskAccordionProps = {
   task: TaskData;
@@ -16,15 +26,55 @@ type TaskAccordionProps = {
 
 export const TaskAccordion = ({ task }: TaskAccordionProps) => {
   const [taskScore, setTaskScore] = React.useState<TaskScoreData>();
+  const [file, setFile] = React.useState<File | null>(null);
+  const [description, setDescription] = React.useState(task.description);
+  const [submitUrl, setSubmitUrl] = React.useState(task.file_url);
+
+  dayjs.extend(utc);
+  dayjs.extend(timezone);
+
+  const deadline = task.deadline; // Assuming this is saved in GMT+7
+  const timezoneGMT7 = "Asia/Bangkok"; // Timezone for GMT+7
+
+  // Convert both current date and deadline to GMT+7
+  const currentDateInGMT7 = dayjs().tz(timezoneGMT7);
+  const deadlineInGMT7 = dayjs(deadline).tz(timezoneGMT7);
+
+  // Check if the current date is before the deadline in GMT+7
+  const isBeforeDeadline = currentDateInGMT7.isBefore(deadlineInGMT7);
 
   React.useEffect(() => {
     getTaskScore(task.task_id).then((res) => {
       if (res.data) {
         setTaskScore(res.data.data);
-        console.log(res.data.data);
       }
     });
   }, []);
+
+  const onSubmitTask = () => {
+    if (file) {
+      const formData = new FormData();
+      formData.append("fileToUpload", file);
+      formData.append("description", description);
+      submitTask(formData, task.task_id)
+        .then((res) => {
+          if (res.data) {
+            setSubmitUrl(res.data.file_url);
+            toast.success("Submit Task Success");
+          }
+        })
+        .catch((res) => {
+          if (res.response.data) {
+            toast.error(res.response.data.message ?? "Failed uploading task");
+          }
+        })
+        .finally(() => {
+          setFile(null);
+        });
+    }
+  };
+
+  const taskDeadline = dayjs(task.deadline); // Start time
 
   return (
     <div className="mb-4">
@@ -48,11 +98,9 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
         <AccordionDetails>
           <div className="my-4 flex flex-col gap-2">
             <p>
-              <TimerOutlinedIcon /> Deadline submission: {task.deadline}
+              <TimerOutlinedIcon /> Deadline submission:{" "}
+              {taskDeadline.format("DD MMMM YYYY HH:mm")}
             </p>
-            {/* <p>
-                <SchoolOutlinedIcon /> 张老师
-               </p> */}
             <p>
               <EventNoteOutlinedIcon /> {task.class_name}
             </p>
@@ -64,7 +112,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
               <p className="mb-2">{task.instruction}</p>
 
               <Link target="none" href={task.task_link}>
-                <Button sx={{ background: "black" }} variant="contained">
+                <Button sx={{ textDecoration: "underline" }} variant="text">
                   Attachment
                 </Button>
               </Link>
@@ -83,16 +131,60 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                 id="outlined-basic"
                 label="description"
                 variant="outlined"
+                value={description}
                 multiline
                 rows={2}
                 fullWidth
                 sx={{ marginBottom: "1rem" }}
+                onChange={(e) => setDescription(e.target.value)}
+                disabled={!isBeforeDeadline}
               />
-              <div className="max-w-max text-black px-10 py-8 border-2 bg-theme-cream rounded-lg">
-                <Button variant="contained" color="primary">
-                  Upload Here
+
+              {isBeforeDeadline && (
+                <div className="className=mt-2">
+                  <FilePicker
+                    accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png, image/gif, video/mp4, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, audio/aac"
+                    multiple={false}
+                    maxSize={2 * MB_UNIT}
+                    onFilesSubmit={(files) => {
+                      if (files.length > 0) {
+                        setFile(files[0]);
+                      }
+                    }}
+                  />
+                </div>
+              )}
+
+              <div>
+                {file?.name ? (
+                  <p>{file.name}</p>
+                ) : (
+                  submitUrl && (
+                    <Link target="none" href={submitUrl}>
+                      <Button
+                        sx={{
+                          textDecoration: "underline",
+                          textAlign: "left",
+                          textTransform: "none",
+                        }}
+                        variant="text"
+                      >
+                        {submitUrl}
+                      </Button>
+                    </Link>
+                  )
+                )}
+              </div>
+
+              <div className="flex justify-end">
+                <Button
+                  sx={{ marginTop: "12px" }}
+                  disabled={file === null}
+                  variant="contained"
+                  onClick={onSubmitTask}
+                >
+                  Submit
                 </Button>
-                <p className="text-xs mt-2">*Maximum size 5mb</p>
               </div>
             </div>
 
@@ -112,7 +204,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                 <p className="mb-2">{taskScore?.feedback.feedback_text}</p>
                 {taskScore?.feedback.attachment_url && (
                   <Link target="none" href={taskScore?.feedback.attachment_url}>
-                    <Button sx={{ background: "black" }} variant="contained">
+                    <Button sx={{ textDecoration: "underline" }} variant="text">
                       Attachment
                     </Button>
                   </Link>

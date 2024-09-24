@@ -3,6 +3,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import RightBar from "../shared/RightBar";
+import useGlobalStore from "@/libs/global";
 
 type MenuItemProps = {
   route: string;
@@ -54,6 +55,8 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
     />
   );
 
+  const { loginData, profilePicUrl } = useGlobalStore();
+
   return (
     <div className="flex">
       <nav className="justify-between invisible md:visible z-50 fixed top-0 left-0 right-0 h-[var(--header-height)] bg-white flex [&>*]:my-auto px-6 border-b-2">
@@ -64,23 +67,36 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
             width={120}
             height={120}
             priority
+            style={{ height: "auto", width: "auto" }}
           />
         </Link>
         <RightBar hideAccount={isLandingPage} />
       </nav>
       {!isLandingPage && (
         <div className={`${className}${appendClass}`}>
-          <div className="flex flex-col justify-center items-center my-4">
-            <Image
-              src="/img/mock-dp.avif" // Update with your image path
-              alt="Rounded Image"
-              width={200}
-              height={200}
-              className="rounded-full object-cover border-2"
-              priority
-            />
-            <p className="mt-2 font-medium">Cherish</p>
-          </div>
+          <Link href="/account/info">
+            <div className="flex flex-col justify-center items-center my-4">
+              {profilePicUrl && (
+                <div
+                  style={{
+                    width: "200px",
+                    height: "200px",
+                    position: "relative",
+                  }}
+                >
+                  <Image
+                    src={profilePicUrl ?? "/img/blank-profile.jpeg"}
+                    alt="Display Picture"
+                    fill
+                    style={{ objectFit: "cover", borderRadius: "12px" }}
+                    className="border-2"
+                    priority
+                  />
+                </div>
+              )}
+              <p className="mt-2 font-medium">{loginData?.name ?? "-"}</p>
+            </div>
+          </Link>
 
           <div className="flex flex-col border-t-2">
             <MenuItem name="Home" route="/home" />

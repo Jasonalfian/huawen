@@ -1,6 +1,7 @@
 import * as yup from "yup";
 
 export const profileFormSchema = yup.object().shape({
+  name: yup.string(),
   age: yup.number().required("Field is required"),
   education_job: yup
     .string()

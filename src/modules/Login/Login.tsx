@@ -8,6 +8,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormData, loginFormSchema } from "./schema";
 import useGlobalStore from "@/libs/global";
 import { postLogin } from "@/client/login";
+import { IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const Login = () => {
   const {
@@ -25,13 +27,12 @@ const Login = () => {
   });
 
   const { login } = useGlobalStore();
-
   const onSubmit = handleSubmit((data) => {
     setErrorMessage("");
     postLogin(data)
       .then((res) => {
         if (res.data?.token) {
-          login(res.data.token);
+          login(res.data.token, res.data.data);
         }
       })
       .catch(() => {
@@ -40,6 +41,10 @@ const Login = () => {
   });
 
   const [errorMessage, setErrorMessage] = React.useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  // Toggle password visibility
+  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
 
   return (
     <div
@@ -70,14 +75,28 @@ const Login = () => {
           <TextField
             fullWidth
             id="outlined-basic"
-            label="password"
+            label="Password"
             variant="outlined"
-            error={errors.password != null}
+            type={showPassword ? "text" : "password"}
+            error={!!errors.password}
             helperText={errors.password?.message ?? ""}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
             {...field}
           />
         )}
-      ></Controller>
+      />
 
       <p style={{ color: "#d32f2f" }}>{errorMessage}</p>
 

@@ -1,33 +1,28 @@
+import { LoginData } from "@/client/login";
 import { create } from "zustand";
-
-type LessonInfo = {
-  lesson_name: string;
-  lesson_time: string;
-  teachers: string;
-};
 
 interface GlobalStore {
   token: string | null;
-  lessonInfo: LessonInfo;
-  login: (newToken: string) => void;
+  loginData: LoginData | null;
+  profilePicUrl: string | null;
+  login: (newToken: string, loginData: LoginData) => void;
   logout: () => void;
+  updateProfilePic: (url: string) => void;
   initializeToken: () => void;
 }
 
 // Create Zustand store with types
 const useGlobalStore = create<GlobalStore>((set) => ({
   token: null,
-  lessonInfo: {
-    lesson_name: "",
-    lesson_time: "",
-    teachers: "",
-  },
-  setLessonInfo: (lessonInfo: LessonInfo) => {
-    set({ lessonInfo: lessonInfo });
-  },
-  login: (newToken) => {
+  loginData: null,
+  profilePicUrl: null,
+  login: (newToken, loginData) => {
     localStorage.setItem("token", newToken);
+    localStorage.setItem("loginData", JSON.stringify(loginData));
+    localStorage.setItem("profilePicUrl", loginData.profile_picture_url);
     set({ token: newToken });
+    set({ loginData: loginData });
+    set({ profilePicUrl: loginData.profile_picture_url });
     window.location.href = "/home";
   },
   logout: () => {
@@ -35,11 +30,21 @@ const useGlobalStore = create<GlobalStore>((set) => ({
     set({ token: null });
     window.location.href = "/";
   },
+  updateProfilePic: (url: string) => {
+    localStorage.setItem("profilePicUrl", url);
+    set({ profilePicUrl: url });
+  },
   initializeToken: () => {
     const storedToken = localStorage.getItem("token");
-    if (storedToken) {
+    const storedLoginData = localStorage.getItem("loginData");
+    const storedProfilePicUrl = localStorage.getItem("profilePicUrl");
+
+    if (storedToken && storedLoginData) {
       set({ token: storedToken });
+      set({ loginData: JSON.parse(storedLoginData) }); // Parse loginData before setting it
+      set({ profilePicUrl: storedProfilePicUrl });
     } else {
+      // Redirect to login page if token or loginData doesn't exist
       if (window.location.pathname !== "/") {
         window.location.href = "/";
       }

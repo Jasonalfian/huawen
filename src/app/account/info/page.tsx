@@ -8,12 +8,22 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { ProfileData, getProfile, postProfile } from "@/client/student";
+import { getProfile, postDisplayPicture, postProfile } from "@/client/student";
 import { Controller, useForm } from "react-hook-form";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import {
+  Box,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Modal,
+  Select,
+} from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { profileFormSchema } from "./schema";
 import toast from "react-hot-toast";
+import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
+import { Close } from "@mui/icons-material";
+import useGlobalStore from "@/libs/global";
 
 const InfoPage = () => {
   const {
@@ -21,11 +31,12 @@ const InfoPage = () => {
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
-  } = useForm<ProfileData>({
+    setValue,
+  } = useForm({
     mode: "onSubmit",
     reValidateMode: "onChange",
     defaultValues: {
+      name: "",
       age: 0,
       created_at: "",
       education_job: "",
@@ -39,10 +50,14 @@ const InfoPage = () => {
     resolver: yupResolver(profileFormSchema),
   });
 
+  const [picture, setPicture] = React.useState<File | null>(null);
+  const { loginData, updateProfilePic, profilePicUrl } = useGlobalStore();
+
   React.useEffect(() => {
     getProfile().then((res) => {
       if (res.data.data) {
         reset(res.data.data);
+        setValue("name", loginData?.name);
       }
     });
   }, []);
@@ -64,6 +79,48 @@ const InfoPage = () => {
       });
   });
 
+  const onSubmitFile = () => {
+    if (picture) {
+      const formData = new FormData();
+      formData.append("fileToUpload", picture);
+      postDisplayPicture(formData)
+        .then((res) => {
+          if (res.data) {
+            const cacheBuster = new Date().getTime();
+            updateProfilePic(
+              `${res.data.profile_picture_url}?t=${cacheBuster}`
+            );
+          }
+          handleClose();
+        })
+        .catch((res) => {
+          if (res.response.data) {
+            toast.error(res.response.data.message ?? "Failed uploading task");
+          }
+          setPicture(null);
+        });
+    }
+  };
+
+  const [open, setOpen] = React.useState(false);
+  const [image, setImage] = React.useState<string | null>(null);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: "absolute" as "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <Layout>
       <div className="text-2xl font-medium text-black p-4 border-2 bg-theme-yellow rounded-lg mb-4">
@@ -74,15 +131,20 @@ const InfoPage = () => {
           <div className="w-full md:w-[23%]">
             <p>Display Picture</p>
           </div>
-          {watch("profile_picture_url") && (
-            <Image
-              src={watch("profile_picture_url") ?? ""}
-              alt="Display Picture"
-              width={200}
-              height={200}
-              className="rounded-xl"
-            />
-          )}
+          <div onClick={handleOpen}>
+            {profilePicUrl ? (
+              <Image
+                src={profilePicUrl}
+                alt="Display Picture"
+                width={350}
+                height={350}
+                className="rounded-xl"
+                style={{ height: "auto", width: "auto" }}
+              />
+            ) : (
+              <Button>Add Image</Button>
+            )}
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row">
@@ -116,13 +178,13 @@ const InfoPage = () => {
 
           <Controller
             control={control}
-            name="student_id"
+            name="name"
             render={({ field }) => (
               <TextField
                 id="outlined-basic"
                 variant="outlined"
-                error={errors.student_id != null}
-                helperText={errors.student_id?.message ?? ""}
+                error={errors.name != null}
+                helperText={errors.name?.message ?? ""}
                 {...field}
                 fullWidth
                 disabled
@@ -219,6 +281,66 @@ const InfoPage = () => {
             Save
           </Button>
         </div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{ position: "absolute", top: 4, right: 4 }}
+            >
+              <Close />
+            </IconButton>
+            <div className="flex flex-col gap-4 ">
+              <FilePicker
+                accept={"image/gif, image/jpeg, image/png, image/jpg"}
+                multiple={false}
+                maxSize={0.5 * MB_UNIT}
+                onFilesSubmit={(files) => {
+                  if (files.length > 0) {
+                    setPicture(files[0]);
+                    setImage(URL.createObjectURL(files[0]));
+                  }
+                }}
+              />
+
+              {image && (
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    height: "auto",
+                  }}
+                >
+                  <Image
+                    alt="Profile picture preview"
+                    src={image}
+                    width={350}
+                    height={350}
+                    style={{
+                      height: "auto",
+                      width: "auto",
+                      objectFit: "contain",
+                    }}
+                  />
+                </div>
+              )}
+
+              <Button
+                onClick={onSubmitFile}
+                className="px-6"
+                variant="contained"
+                disabled={picture === null}
+              >
+                Save Picture
+              </Button>
+            </div>
+          </Box>
+        </Modal>
       </div>
     </Layout>
   );
