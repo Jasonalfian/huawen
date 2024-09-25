@@ -29,6 +29,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
   const [file, setFile] = React.useState<File | null>(null);
   const [description, setDescription] = React.useState(task.description);
   const [submitUrl, setSubmitUrl] = React.useState(task.file_url);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -52,6 +53,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
   }, []);
 
   const onSubmitTask = () => {
+    setIsLoading(true);
     if (file) {
       const formData = new FormData();
       formData.append("fileToUpload", file);
@@ -70,6 +72,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
         })
         .finally(() => {
           setFile(null);
+          setIsLoading(false);
         });
     }
   };
@@ -179,7 +182,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
               <div className="flex justify-end">
                 <Button
                   sx={{ marginTop: "12px" }}
-                  disabled={file === null}
+                  disabled={file === null || isLoading}
                   variant="contained"
                   onClick={onSubmitTask}
                 >

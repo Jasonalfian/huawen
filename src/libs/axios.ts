@@ -1,5 +1,6 @@
 import AxiosInstances from "axios";
 import useGlobalStore from "./global";
+import { ROOT } from "./constant";
 
 const axiosInstance = AxiosInstances.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -31,7 +32,11 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     // Check if the error response status is 401
-    if (error.response && error.response.status === 401) {
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      window.location.pathname !== ROOT
+    ) {
       const logout = useGlobalStore.getState().logout;
       logout();
     }

@@ -27,7 +27,10 @@ const Login = () => {
   });
 
   const { login } = useGlobalStore();
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const onSubmit = handleSubmit((data) => {
+    setIsLoading(true);
     setErrorMessage("");
     postLogin(data)
       .then((res) => {
@@ -37,6 +40,9 @@ const Login = () => {
       })
       .catch(() => {
         setErrorMessage("Invalid Credential");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   });
 
@@ -106,6 +112,7 @@ const Login = () => {
         className="mt-2"
         fullWidth
         sx={{ height: "50px", background: "black" }}
+        disabled={isLoading}
       >
         Submit
       </Button>

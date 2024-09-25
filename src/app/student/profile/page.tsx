@@ -62,7 +62,11 @@ const InfoPage = () => {
     });
   }, []);
 
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoadingPicture, setIsLoadingPicture] = React.useState(false);
+
   const onSubmit = handleSubmit((data) => {
+    setIsLoading(true);
     postProfile({
       gender: data.gender,
       age: data.age,
@@ -74,12 +78,18 @@ const InfoPage = () => {
         console.log("masuk");
         toast.success("Profile updated");
       })
-      .catch(() => {
-        toast.error("Failed to update data");
+      .catch((res) => {
+        if (res.response.data) {
+          toast.error(res.response.data.message ?? "Failed update");
+        }
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   });
 
   const onSubmitFile = () => {
+    setIsLoadingPicture(true);
     if (picture) {
       const formData = new FormData();
       formData.append("fileToUpload", picture);
@@ -91,13 +101,19 @@ const InfoPage = () => {
               `${res.data.profile_picture_url}?t=${cacheBuster}`
             );
           }
+          toast.success("Display picture updated");
           handleClose();
         })
         .catch((res) => {
           if (res.response.data) {
-            toast.error(res.response.data.message ?? "Failed uploading task");
+            toast.error(
+              res.response.data.message ?? "Failed uploading picture"
+            );
           }
           setPicture(null);
+        })
+        .finally(() => {
+          setIsLoadingPicture(false);
         });
     }
   };
@@ -277,7 +293,12 @@ const InfoPage = () => {
         </div>
 
         <div className="flex justify-end">
-          <Button onClick={onSubmit} className="px-6" variant="contained">
+          <Button
+            disabled={isLoading}
+            onClick={onSubmit}
+            className="px-6"
+            variant="contained"
+          >
             Save
           </Button>
         </div>
@@ -334,7 +355,7 @@ const InfoPage = () => {
                 onClick={onSubmitFile}
                 className="px-6"
                 variant="contained"
-                disabled={picture === null}
+                disabled={picture === null || isLoadingPicture}
               >
                 Save Picture
               </Button>
