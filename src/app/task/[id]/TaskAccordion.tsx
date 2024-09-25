@@ -145,7 +145,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                   <FilePicker
                     accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png, image/gif, video/mp4, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, audio/aac"
                     multiple={false}
-                    maxSize={2 * MB_UNIT}
+                    maxSize={20 * MB_UNIT}
                     onFilesSubmit={(files) => {
                       if (files.length > 0) {
                         setFile(files[0]);
