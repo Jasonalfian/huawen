@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import RightBar from "../shared/RightBar";
 import useGlobalStore from "@/libs/global";
+import { STUDENT_URL } from "@/libs/constant";
 
 type MenuItemProps = {
   route: string;
@@ -60,7 +61,7 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
   return (
     <div className="flex">
       <nav className="justify-between invisible md:visible z-50 fixed top-0 left-0 right-0 h-[var(--header-height)] bg-white flex [&>*]:my-auto px-6 border-b-2">
-        <Link href={isLandingPage ? "/" : "/home"}>
+        <Link href={isLandingPage ? "/" : STUDENT_URL.HOME}>
           <Image
             src="/img/huawen-logo.png"
             alt="Company Logo"
@@ -74,7 +75,7 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
       </nav>
       {!isLandingPage && (
         <div className={`${className}${appendClass}`}>
-          <Link href="/account/info">
+          <Link href={STUDENT_URL.PROFILE}>
             <div className="flex flex-col justify-center items-center my-4">
               {profilePicUrl && (
                 <div
@@ -99,8 +100,8 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
           </Link>
 
           <div className="flex flex-col border-t-2">
-            <MenuItem name="Home" route="/home" />
-            <MenuItem name="Announcement" route="/announcement" />
+            <MenuItem name="Home" route={STUDENT_URL.HOME} />
+            <MenuItem name="Announcement" route={STUDENT_URL.ANNOUNCEMENT} />
           </div>
         </div>
       )}

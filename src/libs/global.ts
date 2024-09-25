@@ -1,5 +1,6 @@
 import { LoginData } from "@/client/login";
 import { create } from "zustand";
+import { STUDENT_URL } from "./constant";
 
 interface GlobalStore {
   token: string | null;
@@ -23,7 +24,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
     set({ token: newToken });
     set({ loginData: loginData });
     set({ profilePicUrl: loginData.profile_picture_url });
-    window.location.href = "/home";
+    window.location.href = STUDENT_URL.HOME;
   },
   logout: () => {
     localStorage.removeItem("token");

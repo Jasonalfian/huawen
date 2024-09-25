@@ -12,6 +12,7 @@ import {
   getMaterials,
 } from "@/client/student";
 import Button from "@mui/material/Button";
+import { STUDENT_URL } from "@/libs/constant";
 
 type MaterialProps = {
   params: { id: string };
@@ -39,7 +40,7 @@ export default function Material({ params }: MaterialProps) {
   return (
     <Layout>
       <h1 className="text-4xl mt-6">
-        <Link href="/home">
+        <Link href={STUDENT_URL.HOME}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </Link>
         Class Materials

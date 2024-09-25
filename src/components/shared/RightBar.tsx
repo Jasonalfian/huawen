@@ -5,6 +5,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { styled } from "@mui/material/styles";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import useGlobalStore from "@/libs/global";
+import { STUDENT_URL } from "@/libs/constant";
 
 type RightBarProps = {
   hideAccount?: boolean;
@@ -48,10 +49,10 @@ const RightBar = (props: RightBarProps) => {
           title={
             <React.Fragment>
               <div className="text-sm">
-                <Link href="/account/info">
+                <Link href={STUDENT_URL.PROFILE}>
                   <p className="p-2 border-b-2">Student Information</p>
                 </Link>
-                <Link href="/account/certificate">
+                <Link href={STUDENT_URL.CERTIFICATE}>
                   <p className="p-2 border-b-2">My Certificate</p>
                 </Link>
                 <div onClick={logout}>

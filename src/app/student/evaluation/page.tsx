@@ -4,12 +4,13 @@ import ArrowBackOutlinedIcon from "@mui/icons-material/ArrowBackOutlined";
 import LessonInfo from "@/components/shared/LessonInfo";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import Link from "next/link";
+import { STUDENT_URL } from "@/libs/constant";
 
 export default function Evaluation() {
   return (
     <Layout>
       <h1 className="text-4xl mt-6">
-        <Link href="/home">
+        <Link href={STUDENT_URL.HOME}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </Link>
         Class Evaluation
