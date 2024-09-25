@@ -77,24 +77,25 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
         <div className={`${className}${appendClass}`}>
           <Link href={STUDENT_URL.PROFILE}>
             <div className="flex flex-col justify-center items-center my-4">
-              {profilePicUrl && (
-                <div
-                  style={{
-                    width: "200px",
-                    height: "200px",
-                    position: "relative",
-                  }}
-                >
-                  <Image
-                    src={profilePicUrl ?? "/img/blank-profile.jpeg"}
-                    alt="Display Picture"
-                    fill
-                    style={{ objectFit: "cover", borderRadius: "12px" }}
-                    className="border-2"
-                    priority
-                  />
-                </div>
-              )}
+              <div
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  position: "relative",
+                }}
+              >
+                <Image
+                  src={
+                    profilePicUrl ? profilePicUrl : "/img/blank-profile.jpeg"
+                  }
+                  alt="Display Picture"
+                  fill
+                  style={{ objectFit: "cover", borderRadius: "12px" }}
+                  className="border-2"
+                  priority
+                />
+              </div>
+
               <p className="mt-2 font-medium">{loginData?.name ?? "-"}</p>
             </div>
           </Link>
