@@ -5,7 +5,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { styled } from "@mui/material/styles";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import useGlobalStore from "@/libs/global";
-import { STUDENT_URL } from "@/libs/constant";
+import { ROLE_STUDENT, STUDENT_URL } from "@/libs/constant";
+import { usePathname } from "next/navigation";
 
 type RightBarProps = {
   hideAccount?: boolean;
@@ -14,6 +15,8 @@ type RightBarProps = {
 const RightBar = (props: RightBarProps) => {
   const { hideAccount = false } = props;
   const { logout } = useGlobalStore();
+  const pathname = usePathname();
+  const isStudentPage = pathname.includes(ROLE_STUDENT.toLowerCase());
   const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))(({ theme }) => ({
@@ -49,12 +52,16 @@ const RightBar = (props: RightBarProps) => {
           title={
             <React.Fragment>
               <div className="text-sm">
-                <Link href={STUDENT_URL.PROFILE}>
-                  <p className="p-2 border-b-2">Student Information</p>
-                </Link>
-                <Link href={STUDENT_URL.CERTIFICATE}>
-                  <p className="p-2 border-b-2">My Certificate</p>
-                </Link>
+                {isStudentPage && (
+                  <>
+                    <Link href={STUDENT_URL.PROFILE}>
+                      <p className="p-2 border-b-2">Student Information</p>
+                    </Link>
+                    <Link href={STUDENT_URL.CERTIFICATE}>
+                      <p className="p-2 border-b-2">My Certificate</p>
+                    </Link>
+                  </>
+                )}
                 <div onClick={logout}>
                   <p className="p-2">Sign Out</p>
                 </div>

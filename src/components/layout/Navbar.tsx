@@ -4,7 +4,13 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import RightBar from "../shared/RightBar";
 import useGlobalStore from "@/libs/global";
-import { STUDENT_URL } from "@/libs/constant";
+import {
+  ROLE_STUDENT,
+  ROLE_TEACHER,
+  ROOT,
+  STUDENT_URL,
+  TEACHER_URL,
+} from "@/libs/constant";
 
 type MenuItemProps = {
   route: string;
@@ -19,6 +25,8 @@ type NavbarProps = {
 
 export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
   const pathname = usePathname();
+  const isStudentPage = pathname.includes(ROLE_STUDENT.toLowerCase());
+  const isTeacherPage = pathname.includes(ROLE_TEACHER.toLowerCase());
 
   // Define our base class
   const className =
@@ -61,7 +69,15 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
   return (
     <div className="flex">
       <nav className="justify-between invisible md:visible z-50 fixed top-0 left-0 right-0 h-[var(--header-height)] bg-white flex [&>*]:my-auto px-6 border-b-2">
-        <Link href={isLandingPage ? "/" : STUDENT_URL.HOME}>
+        <Link
+          href={
+            isLandingPage
+              ? ROOT
+              : isStudentPage
+              ? STUDENT_URL.HOME
+              : TEACHER_URL.HOME
+          }
+        >
           <Image
             src="/img/huawen-logo.png"
             alt="Company Logo"
@@ -75,35 +91,50 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
       </nav>
       {!isLandingPage && (
         <div className={`${className}${appendClass}`}>
-          <Link href={STUDENT_URL.PROFILE}>
-            <div className="flex flex-col justify-center items-center my-4">
-              <div
-                style={{
-                  width: "200px",
-                  height: "200px",
-                  position: "relative",
-                }}
-              >
-                <Image
-                  src={
-                    profilePicUrl ? profilePicUrl : "/img/blank-profile.jpeg"
-                  }
-                  alt="Display Picture"
-                  fill
-                  style={{ objectFit: "cover", borderRadius: "12px" }}
-                  className="border-2"
-                  priority
+          {isStudentPage && (
+            <>
+              <Link href={STUDENT_URL.PROFILE}>
+                <div className="flex flex-col justify-center items-center my-4 border-B-2">
+                  <div
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      position: "relative",
+                    }}
+                  >
+                    <Image
+                      src={
+                        profilePicUrl
+                          ? profilePicUrl
+                          : "/img/blank-profile.jpeg"
+                      }
+                      alt="Display Picture"
+                      fill
+                      style={{ objectFit: "cover", borderRadius: "12px" }}
+                      className="border-2"
+                      priority
+                    />
+                  </div>
+
+                  <p className="mt-2 font-medium">{loginData?.name ?? "-"}</p>
+                </div>
+              </Link>
+              <div className="flex flex-col">
+                <MenuItem name="Home" route={STUDENT_URL.HOME} />
+                <MenuItem
+                  name="Announcement"
+                  route={STUDENT_URL.ANNOUNCEMENT}
                 />
               </div>
+            </>
+          )}
 
-              <p className="mt-2 font-medium">{loginData?.name ?? "-"}</p>
+          {isTeacherPage && (
+            <div className="flex flex-col">
+              <MenuItem name="Home" route={TEACHER_URL.HOME} />
+              <MenuItem name="Announcement" route={TEACHER_URL.HOME} />
             </div>
-          </Link>
-
-          <div className="flex flex-col border-t-2">
-            <MenuItem name="Home" route={STUDENT_URL.HOME} />
-            <MenuItem name="Announcement" route={STUDENT_URL.ANNOUNCEMENT} />
-          </div>
+          )}
         </div>
       )}
       {show && !isLandingPage ? <ModalOverlay /> : <></>}

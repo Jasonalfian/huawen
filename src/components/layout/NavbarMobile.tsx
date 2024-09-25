@@ -3,7 +3,7 @@ import Link from "next/link";
 import MenuIcon from "@mui/icons-material/Menu";
 import Image from "next/image";
 import RightBar from "../shared/RightBar";
-import { STUDENT_URL } from "@/libs/constant";
+import { ROOT, STUDENT_URL } from "@/libs/constant";
 
 type NavbarMobileProps = {
   setter: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,7 +28,7 @@ export default function NavbarMobile({
           <MenuIcon fontSize="large" />
         </button>
       )}
-      <Link href={isLandingPage ? "/" : STUDENT_URL.HOME} className="mx-auto">
+      <Link href={isLandingPage ? ROOT : STUDENT_URL.HOME} className="mx-auto">
         <Image
           src="/img/huawen-logo.png"
           alt="Company Logo"

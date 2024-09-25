@@ -45,7 +45,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
   logout: () => {
     localStorage.removeItem("token");
     set({ token: null });
-    window.location.href = "/";
+    window.location.href = ROOT;
   },
   updateProfilePic: (url: string) => {
     localStorage.setItem("profilePicUrl", url);
@@ -86,8 +86,8 @@ const useGlobalStore = create<GlobalStore>((set) => ({
       set({ profilePicUrl: storedProfilePicUrl });
     } else {
       // Redirect to login page if token or loginData doesn't exist
-      if (window.location.pathname !== "/") {
-        window.location.href = "/";
+      if (window.location.pathname !== ROOT) {
+        window.location.href = ROOT;
       }
     }
   },
