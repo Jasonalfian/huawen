@@ -10,7 +10,7 @@ import {
 } from "@/client/teacher";
 import Layout from "@/components/layout";
 import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
-import { ACCEPT_FILE } from "@/libs/constant";
+import { ACCEPT_FILE, MODAL_STYLE } from "@/libs/constant";
 import { Close } from "@mui/icons-material";
 import {
   Accordion,
@@ -223,7 +223,7 @@ const Material = ({ params }: MaterialProps) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={MODAL_STYLE}>
           <IconButton
             aria-label="close"
             onClick={handleClose}

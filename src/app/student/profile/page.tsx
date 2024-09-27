@@ -24,6 +24,7 @@ import toast from "react-hot-toast";
 import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
 import { Close } from "@mui/icons-material";
 import useGlobalStore from "@/libs/global";
+import { MODAL_STYLE } from "@/libs/constant";
 
 const InfoPage = () => {
   const {
@@ -126,18 +127,6 @@ const InfoPage = () => {
   const handleClose = () => {
     setImage(null);
     setOpen(false);
-  };
-
-  const style = {
-    position: "absolute" as "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 400,
-    bgcolor: "background.paper",
-    border: "2px solid #000",
-    boxShadow: 24,
-    p: 4,
   };
 
   return (
@@ -311,7 +300,7 @@ const InfoPage = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box sx={style}>
+          <Box sx={MODAL_STYLE}>
             <IconButton
               aria-label="close"
               onClick={handleClose}

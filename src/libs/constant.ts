@@ -20,3 +20,16 @@ export const ACCEPT_FILE =
 export const ROOT = "/";
 export const ROLE_STUDENT = "STUDENT";
 export const ROLE_TEACHER = "TEACHER";
+
+export const MODAL_STYLE = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 500,
+  maxWidth: "100%",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
