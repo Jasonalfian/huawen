@@ -21,7 +21,7 @@ export type MaterialData = {
   updated_at: string;
 };
 
-export type uploadFileData = {
+export type UploadFileData = {
   url: string;
   type: string;
 };
@@ -75,10 +75,24 @@ type CreateMaterialPayload = {
   link: string;
 };
 
+type EditMaterialPayload = {
+  description: string;
+  link: string;
+  meta: string;
+};
+
 export const createMaterial = (data: CreateMaterialPayload) => {
   return axios({
     method: "post",
     url: "teacher/createMaterial.php",
+    data,
+  });
+};
+
+export const editMaterial = (data: EditMaterialPayload, materialId: string) => {
+  return axios({
+    method: "post",
+    url: `teacher/editMaterial.php?material_id=${materialId}`,
     data,
   });
 };

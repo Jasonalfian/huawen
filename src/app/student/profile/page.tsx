@@ -123,7 +123,10 @@ const InfoPage = () => {
   const handleOpen = () => {
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setImage(null);
+    setOpen(false);
+  };
 
   const style = {
     position: "absolute" as "absolute",

@@ -13,7 +13,7 @@ type LessonCardProps = {
 const LessonCard = ({ data }: LessonCardProps) => {
   return (
     <div className="flex flex-col gap-1 w-full bg-theme-cream border-2 rounded-lg p-4">
-      <h2 className="text-2xl mb-2">Lesson 1</h2>
+      <h2 className="text-2xl mb-2">{data.lesson_name ?? "-"}</h2>
       <p>
         <EventNoteOutlinedIcon /> {data?.class_name ?? "-"}
       </p>
