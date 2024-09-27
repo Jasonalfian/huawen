@@ -2,7 +2,7 @@
 
 import { LessonData, getLessons } from "@/client/student";
 import Layout from "@/components/layout";
-import LessonCard from "@/components/lesson/LessonCard";
+import LessonCard from "@/components/lesson/student/LessonCard";
 import React from "react";
 
 export default function HomePage() {

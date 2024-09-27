@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
-import LessonInfo from "../shared/LessonInfo";
 import Link from "next/link";
-import { LessonData } from "@/client/student";
-import { STUDENT_URL } from "@/libs/constant";
+import { LessonData } from "@/client/teacher";
+import { STUDENT_URL, TEACHER_URL } from "@/libs/constant";
+import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
+import QueryBuilderOutlinedIcon from "@mui/icons-material/QueryBuilderOutlined";
+import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 
 type LessonCardProps = {
   data: LessonData;
@@ -11,9 +13,19 @@ type LessonCardProps = {
 const LessonCard = ({ data }: LessonCardProps) => {
   return (
     <div className="flex flex-col gap-1 w-full bg-theme-cream border-2 rounded-lg p-4">
-      <LessonInfo data={data} />
+      <h2 className="text-2xl mb-2">Lesson 1</h2>
+      <p>
+        <EventNoteOutlinedIcon /> {data?.class_name ?? "-"}
+      </p>
+      <p>
+        <QueryBuilderOutlinedIcon />{" "}
+        {data.start_time ? `${data.start_time} - ${data.end_time}` : "-"}
+      </p>
+      <p>
+        <SchoolOutlinedIcon /> {data?.teachers ?? "-"}
+      </p>
       <div className="grid md:flex mt-2 gap-4">
-        <Link href={`${STUDENT_URL.MATERIAL}${data.lesson_id}`}>
+        <Link href={`${TEACHER_URL.MATERIAL}/${data.lesson_id}`}>
           <Button
             fullWidth
             sx={{ background: "var(--theme-red)" }}
@@ -31,22 +43,22 @@ const LessonCard = ({ data }: LessonCardProps) => {
             Join Class
           </Button>
         </Link>
-        <Link href={data.evaluation}>
+        <Link href={`${TEACHER_URL.TASK}/${data.lesson_id}`}>
           <Button
             fullWidth
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Class Evaluation
+            Task
           </Button>
         </Link>
-        <Link href={`${STUDENT_URL.TASK}${data.lesson_id}`}>
+        <Link href={`${TEACHER_URL.SUBMISSION}/${data.lesson_id}`}>
           <Button
             fullWidth
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Submit Task
+            Submission
           </Button>
         </Link>
       </div>

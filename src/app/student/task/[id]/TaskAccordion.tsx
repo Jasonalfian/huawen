@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { ACCEPT_FILE } from "@/libs/constant";
 
 type TaskAccordionProps = {
   task: TaskData;
@@ -146,7 +147,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
               {isBeforeDeadline && (
                 <div className="className=mt-2">
                   <FilePicker
-                    accept="application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png, image/gif, video/mp4, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, audio/aac"
+                    accept={ACCEPT_FILE}
                     multiple={false}
                     maxSize={20 * MB_UNIT}
                     onFilesSubmit={(files) => {
