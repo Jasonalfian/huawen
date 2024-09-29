@@ -21,6 +21,21 @@ export type MaterialData = {
   updated_at: string;
 };
 
+export type TaskData = {
+  created_at: string;
+  deadline: string;
+  instruction: string;
+  lesson_id: string;
+  lesson_name: string;
+  meta: string;
+  task_id: string;
+  task_link: string;
+  task_type: string;
+  title: string;
+  updated_at: string;
+  visible: number;
+};
+
 export type UploadFileData = {
   url: string;
   type: string;
@@ -81,6 +96,28 @@ type EditMaterialPayload = {
   meta: string;
 };
 
+export type TASK_TYPE = "HOMEWORK" | "EXAM";
+
+export type CreateTaskPayload = {
+  lesson_id: string;
+  task_type: string;
+  title: string;
+  instruction: string;
+  link: string;
+  visible: number;
+  deadline: string;
+};
+
+export type EditTaskPayload = {
+  task_type: string;
+  title: string;
+  instruction: string;
+  task_link: string;
+  visible: number;
+  deadline: string;
+  meta: string;
+};
+
 export const createMaterial = (data: CreateMaterialPayload) => {
   return axios({
     method: "post",
@@ -89,10 +126,26 @@ export const createMaterial = (data: CreateMaterialPayload) => {
   });
 };
 
+export const createTask = (data: CreateTaskPayload) => {
+  return axios({
+    method: "post",
+    url: "teacher/createTask.php",
+    data,
+  });
+};
+
 export const editMaterial = (data: EditMaterialPayload, materialId: string) => {
   return axios({
     method: "post",
     url: `teacher/editMaterial.php?material_id=${materialId}`,
+    data,
+  });
+};
+
+export const editTask = (data: EditTaskPayload, taskId: string) => {
+  return axios({
+    method: "post",
+    url: `teacher/editTask.php?task_id=${taskId}`,
     data,
   });
 };

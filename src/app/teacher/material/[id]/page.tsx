@@ -31,18 +31,6 @@ type MaterialProps = {
   params: { id: string };
 };
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
-
 const Material = ({ params }: MaterialProps) => {
   const [listMaterial, setListMaterial] = React.useState<MaterialData[]>([]);
   const fetchMaterials = () => {
@@ -63,6 +51,7 @@ const Material = ({ params }: MaterialProps) => {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isEdit, setIsEdit] = React.useState(false);
+  const [description, setDescription] = React.useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -76,7 +65,6 @@ const Material = ({ params }: MaterialProps) => {
     setMeta("");
     setOpen(false);
   };
-  const [description, setDescription] = React.useState("");
   const doEditMaterial = (fileRes: UploadFileData) => {
     editMaterial(
       {
@@ -169,51 +157,55 @@ const Material = ({ params }: MaterialProps) => {
         </div>
 
         <div className="flex flex-col gap-4">
-          {listMaterial.map((material) => {
-            return (
-              <div key={material.material_id}>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ArrowDropDownIcon />}
-                    aria-controls="panel2-content"
-                    id="panel2-header"
-                  >
-                    <h2 className="font-semibold">{material.description}</h2>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div className="space-x-2">
-                      <Link target="none" href={material.link}>
+          {listMaterial.length > 0 ? (
+            listMaterial.map((material) => {
+              return (
+                <div key={material.material_id}>
+                  <Accordion>
+                    <AccordionSummary
+                      expandIcon={<ArrowDropDownIcon />}
+                      aria-controls="panel2-content"
+                      id="panel2-header"
+                    >
+                      <h2 className="font-semibold">{material.description}</h2>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                      <div className="space-x-2">
+                        <Link target="none" href={material.link}>
+                          <Button
+                            sx={{
+                              background: "black",
+                            }}
+                            variant="contained"
+                          >
+                            Current task link
+                          </Button>
+                        </Link>
+
                         <Button
                           sx={{
                             background: "black",
                           }}
                           variant="contained"
+                          onClick={() => {
+                            handleOpen();
+                            setIsEdit(true);
+                            setMaterialId(material.material_id);
+                            setDescription(material.description);
+                            setSubmitUrl(material.link);
+                          }}
                         >
-                          Current task link
+                          Edit
                         </Button>
-                      </Link>
-
-                      <Button
-                        sx={{
-                          background: "black",
-                        }}
-                        variant="contained"
-                        onClick={() => {
-                          handleOpen();
-                          setIsEdit(true);
-                          setMaterialId(material.material_id);
-                          setDescription(material.description);
-                          setSubmitUrl(material.link);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    </div>
-                  </AccordionDetails>
-                </Accordion>
-              </div>
-            );
-          })}
+                      </div>
+                    </AccordionDetails>
+                  </Accordion>
+                </div>
+              );
+            })
+          ) : (
+            <p>No materials found</p>
+          )}
         </div>
       </div>
 

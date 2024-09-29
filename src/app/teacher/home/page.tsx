@@ -3,12 +3,9 @@
 import { getLessons, LessonData } from "@/client/teacher";
 import Layout from "@/components/layout";
 import LessonCard from "@/components/lesson/teacher/LessonCard";
-import useGlobalStore from "@/libs/global";
 import React from "react";
 
 const Home = () => {
-  const { loginData } = useGlobalStore();
-
   const [listLesson, setListLesson] = React.useState<LessonData[]>([]);
 
   React.useEffect(() => {
@@ -21,9 +18,11 @@ const Home = () => {
 
   return (
     <Layout>
-      {listLesson.map((lesson) => {
-        return <LessonCard data={lesson} />;
-      })}
+      <div className="space-y-4">
+        {listLesson.map((lesson) => {
+          return <LessonCard data={lesson} />;
+        })}
+      </div>
     </Layout>
   );
 };
