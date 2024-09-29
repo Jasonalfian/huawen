@@ -12,6 +12,17 @@ export type LoginData = {
   profile_picture_url: string;
 };
 
+export type ForgotData = {
+  username: string;
+  token: string;
+};
+
+export type ResetData = {
+  password: string;
+  token: string;
+};
+
+
 export const postLogin = (data: LoginPayload) => {
   return axios({
     method: "post",
@@ -19,3 +30,20 @@ export const postLogin = (data: LoginPayload) => {
     data,
   });
 };
+
+export const postForgot = (data: ForgotData) => {
+  return axios({
+    method: "post",
+    url: `/account/forget_password.php`,
+    data,
+  });
+};
+
+export const postReset = (data: ResetData) => {
+  return axios({
+    method: "post",
+    url: `/account/reset_password.php`,
+    data,
+  });
+};
+

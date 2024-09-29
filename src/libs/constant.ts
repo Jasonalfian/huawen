@@ -18,6 +18,7 @@ export const ACCEPT_FILE =
   "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png, image/gif, video/mp4, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, audio/aac";
 
 export const ROOT = "/";
+export const FORGOT_PASSWORD_URL = "/forgot";
 export const ROLE_STUDENT = "STUDENT";
 export const ROLE_TEACHER = "TEACHER";
 

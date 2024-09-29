@@ -3,6 +3,7 @@
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import React from "react";
+import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LoginFormData, loginFormSchema } from "./schema";
@@ -10,6 +11,7 @@ import useGlobalStore from "@/libs/global";
 import { postLogin } from "@/client/login";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { FORGOT_PASSWORD_URL } from "@/libs/constant";
 
 const Login = () => {
   const {
@@ -38,8 +40,12 @@ const Login = () => {
           login(res.data.token, res.data.data);
         }
       })
-      .catch(() => {
-        setErrorMessage("Invalid Credential");
+      .catch((e) => {
+        if(typeof e.response === 'undefined'){
+          setErrorMessage("Failed to connect to server");
+        } else {
+          setErrorMessage(e.response.data.message);
+        }
       })
       .finally(() => {
         setIsLoading(false);
@@ -64,7 +70,7 @@ const Login = () => {
         render={({ field }) => (
           <TextField
             id="outlined-basic"
-            label="username"
+            label="Username / Email"
             variant="outlined"
             error={errors.username != null}
             helperText={errors.username?.message ?? ""}
@@ -105,7 +111,10 @@ const Login = () => {
       />
 
       <p style={{ color: "#d32f2f" }}>{errorMessage}</p>
-
+      <Link href={FORGOT_PASSWORD_URL}> 
+        <p style={{ color: "#a1a1a1" }}>Forgot password?</p>
+      </Link>
+      
       <Button
         variant="contained"
         onClick={onSubmit}

@@ -11,6 +11,7 @@ export type LessonData = {
   teachers: string;
   zoom_link: string;
   evaluation: string;
+  task_type: string;
 };
 
 export type AnnouncementData = {

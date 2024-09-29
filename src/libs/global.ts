@@ -1,6 +1,7 @@
 import { LoginData } from "@/client/login";
 import { create } from "zustand";
 import {
+  FORGOT_PASSWORD_URL,
   ROLE_STUDENT,
   ROLE_TEACHER,
   ROOT,
@@ -54,10 +55,6 @@ const useGlobalStore = create<GlobalStore>((set) => ({
   initializeToken: () => {
     const pathname = window.location.pathname;
 
-    if (pathname === ROOT) {
-      return;
-    }
-
     const storedToken = getLocalStorageItem("token");
     const storedLoginData = getLocalStorageItem("loginData");
     const storedProfilePicUrl = getLocalStorageItem("profilePicUrl");
@@ -86,7 +83,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
       set({ profilePicUrl: storedProfilePicUrl });
     } else {
       // Redirect to login page if token or loginData doesn't exist
-      if (window.location.pathname !== ROOT) {
+      if (window.location.pathname !== ROOT && !pathname.startsWith(FORGOT_PASSWORD_URL) ) {
         window.location.href = ROOT;
       }
     }
