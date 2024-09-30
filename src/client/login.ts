@@ -22,6 +22,9 @@ export type ResetData = {
   token: string;
 };
 
+export type BypassLoginData = {
+  token: string;
+};
 
 export const postLogin = (data: LoginPayload) => {
   return axios({
@@ -44,6 +47,14 @@ export const postReset = (data: ResetData) => {
     method: "post",
     url: `/account/reset_password.php`,
     data,
+  });
+};
+
+export const postBypassLogin = (data: BypassLoginData) => {
+  return axios({
+    method: "get",
+    url: `/account/login.php?full=1`,
+    headers: {token: data.token}
   });
 };
 
