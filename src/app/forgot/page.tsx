@@ -13,8 +13,10 @@ import Turnstile, { useTurnstile } from "react-turnstile";
 import {
   ROOT
 } from "@/libs/constant";
+import { useRouter } from 'next/navigation'
 
 export default function Forgot() {
+  const router = useRouter()
   const {
     control,
     handleSubmit,
@@ -46,7 +48,7 @@ export default function Forgot() {
           if (res.data?.success) {
             window.alert("Password reset link has been sent to registered email");
             setValue('username', '')
-            window.location.href = ROOT;
+            router.push(ROOT);
           } else {
             setErrorMessage(res.data.message)
           }

@@ -45,6 +45,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
   },
   logout: () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("loginData");
     set({ token: null });
     window.location.href = ROOT;
   },

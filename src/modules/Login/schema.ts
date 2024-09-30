@@ -35,7 +35,7 @@ export const resetFormSchema = yup.object().shape({
   token: yup
     .string()
     .required("Reset token is required")
-    .required("Token is needed"),
+    .min(1, "Token is needed"),
 });
 
 export type ResetFormData = yup.InferType<typeof resetFormSchema>;
