@@ -1,7 +1,7 @@
 import { Button } from "@mui/material";
 import Link from "next/link";
 import { LessonData } from "@/client/teacher";
-import { STUDENT_URL, TEACHER_URL } from "@/libs/constant";
+import { TEACHER_URL } from "@/libs/constant";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import QueryBuilderOutlinedIcon from "@mui/icons-material/QueryBuilderOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
