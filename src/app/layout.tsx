@@ -7,7 +7,7 @@ import useGlobalStore from "@/libs/global";
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Toaster } from "react-hot-toast";
-import { ROOT } from "@/libs/constant";
+import { FORGOT_PASSWORD_URL, ROOT } from "@/libs/constant";
 
 export default function RootLayout({
   children,
@@ -20,7 +20,7 @@ export default function RootLayout({
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       initializeToken();
-      setIsHomePage(window.location.pathname === ROOT);
+      setIsHomePage(window.location.pathname === ROOT || window.location.pathname.startsWith(FORGOT_PASSWORD_URL));
     }
   }, []);
 

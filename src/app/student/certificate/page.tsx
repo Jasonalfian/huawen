@@ -12,8 +12,11 @@ const Certificate = () => {
       <div className="my-8 flex flex-col gap-1">
         <p className="text-xl font-bold">Congratulations!</p>
         <p>
-          You are one step ahead of a brighter future with your mandarin skill.
-          Here are your certificate for graduating our course.
+          {
+            /* You are one step ahead of a brighter future with your mandarin skill.
+            Here are your certificate for graduating our course. */
+          }
+          Page is under construction.
         </p>
       </div>
 

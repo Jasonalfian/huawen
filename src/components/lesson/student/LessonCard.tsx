@@ -46,7 +46,7 @@ const LessonCard = ({ data }: LessonCardProps) => {
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Submit Task
+            Submit {data.task_type ?? ""}
           </Button>
         </Link>
       </div>
