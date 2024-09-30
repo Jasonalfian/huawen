@@ -33,7 +33,7 @@ export default function HomePage() {
         <div className="flex text-black items-center p-2 justify-between h-10 w-60 border-2 border-theme-yellow rounded-lg">
           <p>Attendance</p>
           <p>
-            {totalAttend}/{listLesson.length}
+            {totalAttend}/{listLesson.filter((lessonData) => {return new Date(lessonData.start_time) < new Date()}).length}
           </p>
         </div>
         <div className="flex text-black items-center p-2 justify-between h-10 w-60 border-2 border-theme-yellow  rounded-lg">
