@@ -1,3 +1,4 @@
+import { borderRadius } from "./../../node_modules/@mui/system/borders/borders.d";
 export const STUDENT_URL = {
   HOME: "/student/home",
   PROFILE: "/student/profile",
@@ -27,10 +28,10 @@ export const MODAL_STYLE = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 500,
+  width: 520,
   maxWidth: "100%",
   bgcolor: "background.paper",
-  border: "2px solid #000",
+  borderRadius: "12px",
   boxShadow: 24,
   p: 4,
 };

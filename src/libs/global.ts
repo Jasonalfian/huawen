@@ -42,6 +42,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
       return;
     }
     window.location.href = TEACHER_URL.HOME;
+    return;
   },
   logout: () => {
     localStorage.removeItem("token");
@@ -74,6 +75,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
 
         if (role === ROLE_TEACHER) {
           window.location.href = TEACHER_URL.HOME;
+          return;
         }
       }
     }
@@ -84,8 +86,12 @@ const useGlobalStore = create<GlobalStore>((set) => ({
       set({ profilePicUrl: storedProfilePicUrl });
     } else {
       // Redirect to login page if token or loginData doesn't exist
-      if (window.location.pathname !== ROOT && !pathname.startsWith(FORGOT_PASSWORD_URL) ) {
+      if (
+        window.location.pathname !== ROOT &&
+        !pathname.startsWith(FORGOT_PASSWORD_URL)
+      ) {
         window.location.href = ROOT;
+        return;
       }
     }
   },

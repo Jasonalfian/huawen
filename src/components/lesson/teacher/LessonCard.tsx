@@ -5,21 +5,36 @@ import { STUDENT_URL, TEACHER_URL } from "@/libs/constant";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import QueryBuilderOutlinedIcon from "@mui/icons-material/QueryBuilderOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import dayjs from "dayjs";
 
 type LessonCardProps = {
   data: LessonData;
+  handleOpen: () => void;
 };
 
-const LessonCard = ({ data }: LessonCardProps) => {
+const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
+  const formattedTime = `${dayjs(data.start_time).format(
+    "DD MMMM YYYY HH:mm"
+  )} - ${dayjs(data.end_time).format("HH:mm")}`;
   return (
     <div className="flex flex-col gap-1 w-full bg-theme-cream border-2 rounded-lg p-4">
-      <h2 className="text-2xl mb-2">{data.lesson_name ?? "-"}</h2>
+      <div className="flex justify-between w-full">
+        <h2 className="text-2xl mb-2">{data.lesson_name ?? "-"}</h2>
+        <Button
+          onClick={() => {
+            handleOpen();
+          }}
+          sx={{ background: "black" }}
+          variant="contained"
+        >
+          Edit
+        </Button>
+      </div>
       <p>
         <EventNoteOutlinedIcon /> {data?.class_name ?? "-"}
       </p>
       <p>
-        <QueryBuilderOutlinedIcon />{" "}
-        {data.start_time ? `${data.start_time} - ${data.end_time}` : "-"}
+        <QueryBuilderOutlinedIcon /> {formattedTime ?? "-"}
       </p>
       <p>
         <SchoolOutlinedIcon /> {data?.teachers ?? "-"}

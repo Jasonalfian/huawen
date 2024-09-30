@@ -9,6 +9,7 @@ export type LessonData = {
   start_time: string;
   teachers: string;
   zoom_link: string;
+  recording_link: string;
 };
 
 export type MaterialData = {
@@ -39,6 +40,16 @@ export type TaskData = {
 export type UploadFileData = {
   url: string;
   type: string;
+};
+
+export type EditLessonPayload = {
+  lesson_id: string;
+  lesson_name: string;
+  description: string;
+  start_time: string;
+  end_time: string;
+  zoom_link?: string;
+  recording_link?: string;
 };
 
 export const getLessons = () => {
@@ -147,5 +158,33 @@ export const editTask = (data: EditTaskPayload, taskId: string) => {
     method: "post",
     url: `teacher/editTask.php?task_id=${taskId}`,
     data,
+  });
+};
+
+export const editLessonInfo = (data: EditLessonPayload) => {
+  return axios({
+    method: "post",
+    url: `/teacher/editLesson.php?lesson_id=${data.lesson_id}`,
+    data,
+  });
+};
+
+export const editLessonZoom = (lessonId: string, zoomLink = "") => {
+  return axios({
+    method: "post",
+    url: `/teacher/editZoomLink.php?lesson_id=${lessonId}`,
+    data: {
+      zoom_link: zoomLink,
+    },
+  });
+};
+
+export const editLessonRecording = (lessonId: string, recordingLink = "") => {
+  return axios({
+    method: "post",
+    url: `/teacher/editZoomRecording.php?lesson_id=${lessonId}`,
+    data: {
+      recording_link: recordingLink,
+    },
   });
 };
