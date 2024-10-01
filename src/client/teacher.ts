@@ -125,6 +125,12 @@ export type AttendanceData = {
   username: string;
 };
 
+export type AttendancePayload = {
+  student_id: string;
+  attendance: number;
+  evaluation: string;
+};
+
 export const getLessons = () => {
   return axios({
     method: "get",
@@ -242,6 +248,17 @@ export const gradeSubmission = (
   return axios({
     method: "post",
     url: `/teacher/gradeSubmission.php?task_id=${taskId}`,
+    data,
+  });
+};
+
+export const updateStudentAttendance = (
+  lessonId: string,
+  data: AttendancePayload[]
+) => {
+  return axios({
+    method: "post",
+    url: `/teacher/editLessonAttendanceEvaluation.php?lesson_id=${lessonId}`,
     data,
   });
 };
