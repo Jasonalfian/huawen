@@ -13,6 +13,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
+  IconButton,
   InputLabel,
   Link,
   TextField,
@@ -26,6 +27,7 @@ import {
 } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as yup from "yup";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 type SubmissionAccordionProps = {
   submission: SubmssionData;
@@ -76,26 +78,36 @@ const SubmissionAccordion = ({
   const [file, setFile] = React.useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  // Separate the default aspects and custom aspects
-  const uniqueScores = Array.from(
-    new Set(submission.scores.map((score) => score.aspect))
-  ); // Get unique aspects
-  const customScores = uniqueScores.filter(
-    (aspect) => !defaultAspects.includes(aspect ?? "")
-  ); // Get custom aspects
+  // Combine default aspects and scores from the backend
+  const mergedScores = defaultAspects.map((aspect) => {
+    const foundScore = submission.scores.find(
+      (score) => score.aspect === aspect
+    );
+    return {
+      aspect,
+      score: foundScore ? Number(foundScore.score) : 0, // If not found, default to score 0
+    };
+  });
 
-  // Combine default and custom aspects
-  const sortedAspects = [
-    ...defaultAspects.filter((aspect) => uniqueScores.includes(aspect)), // Keep only default aspects that exist
-    ...customScores, // Add custom aspects at the end
-  ];
+  // Add custom aspects that are not part of the default aspects
+  const customAspects = submission.scores.filter(
+    (score) => !defaultAspects.includes(score.aspect ?? "")
+  );
+
+  // Combine mandatory aspects and custom aspects
+  const initialSortedAspects = [...mergedScores, ...customAspects];
+
+  // Track sorted aspects in state
+  const [sortedAspects, setSortedAspects] =
+    React.useState(initialSortedAspects);
 
   const {
     control,
     watch,
-    register,
     formState: { errors },
     handleSubmit,
+    getValues,
+    setValue,
   } = useForm<FormValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -103,15 +115,10 @@ const SubmissionAccordion = ({
     defaultValues: {
       feedback_text: submission.feedback_text,
       feedback_attachment_url: submission.feedback_attachment_url,
-      scores: sortedAspects.map((aspect) => {
-        const scoreObj = submission.scores.find(
-          (score) => score.aspect === aspect
-        );
-        return {
-          aspect: aspect,
-          score: Number(scoreObj?.score) || 0,
-        };
-      }),
+      scores: sortedAspects.map((score) => ({
+        aspect: score.aspect,
+        score: score.score,
+      })),
     },
   });
 
@@ -122,9 +129,33 @@ const SubmissionAccordion = ({
 
   const addAspect = () => {
     const newAspect = prompt("Enter new aspect:");
-    if (newAspect) {
-      setAspects([...aspects, newAspect]);
-      setScores([...scores, { aspect: newAspect, score: "" }]);
+    if (
+      newAspect &&
+      !sortedAspects.some((aspect) => aspect.aspect === newAspect)
+    ) {
+      const newScore = { aspect: newAspect, score: 0 }; // Default score for new aspect
+      setSortedAspects([...sortedAspects, newScore]);
+
+      const currentScores = getValues("scores");
+      if (currentScores) {
+        // Update form values
+        setValue("scores", [...currentScores, newScore]);
+      }
+    }
+  };
+
+  const handleRemoveAspect = (index: number) => {
+    const currentScores = getValues("scores");
+    // Remove the score at the given index
+
+    console.log(currentScores);
+    if (currentScores) {
+      const updatedScores = currentScores.filter((_, i) => i !== index);
+      setValue("scores", updatedScores);
+
+      // Update the sortedAspects state to remove the corresponding aspect
+      const updatedAspects = sortedAspects.filter((_, i) => i !== index);
+      setSortedAspects(updatedAspects);
     }
   };
 
@@ -230,7 +261,7 @@ const SubmissionAccordion = ({
           <div className="flex mt-2 gap-4">
             <div className="w-[50%] space-y-4">
               {sortedAspects.map((aspect, index) => (
-                <div key={index}>
+                <div className="flex" key={index}>
                   <Controller
                     name={`scores.${index}.score`}
                     control={control}
@@ -238,7 +269,7 @@ const SubmissionAccordion = ({
                     render={({ field }) => (
                       <>
                         <TextField
-                          label={aspect}
+                          label={aspect.aspect}
                           type="number"
                           fullWidth
                           {...field}
@@ -250,11 +281,16 @@ const SubmissionAccordion = ({
                       </>
                     )}
                   />
-                  <input
-                    type="hidden"
-                    {...register(`scores.${index}.aspect`)}
-                    value={aspect}
-                  />
+                  {!defaultAspects.includes(aspect.aspect ?? "") && ( // Only show the delete button for custom aspects
+                    <IconButton
+                      onClick={() => handleRemoveAspect(index)}
+                      color="secondary"
+                      aria-label="remove aspect"
+                      style={{ marginLeft: "10px" }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </div>
               ))}
 
