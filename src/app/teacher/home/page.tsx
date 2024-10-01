@@ -210,6 +210,7 @@ const Home = () => {
                     render={({ field }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateTimePicker
+                          disabled
                           value={field.value ? dayjs(field.value) : null}
                           onChange={(newValue) => {
                             field.onChange(
@@ -233,6 +234,7 @@ const Home = () => {
                     render={({ field }) => (
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DateTimePicker
+                          disabled
                           value={field.value ? dayjs(field.value) : null}
                           onChange={(newValue) => {
                             field.onChange(
