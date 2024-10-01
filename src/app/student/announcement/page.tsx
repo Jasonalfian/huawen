@@ -55,8 +55,8 @@ export default function AnnouncementPage() {
         <div className="absolute bottom-0 left-0 right-0 bg-theme-red">
           <p className="text-sm text-white text-center p-4">
             * National public holiday will be considered as a holiday for all
-            classes in Huawen.The class wil be adjusted ot another date (a day
-            after before).
+            classes in Huawen. The class wil be adjusted to another date (a day
+            after or before).
           </p>
         </div>
       </div>
