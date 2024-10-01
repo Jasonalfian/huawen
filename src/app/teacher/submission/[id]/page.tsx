@@ -14,13 +14,17 @@ const Submission = ({ params }: SubmissionProps) => {
     []
   );
 
-  React.useEffect(() => {
+  const fetchSubmissions = () => {
     getSubmissions(params.id).then((res) => {
       if (res.data) {
         const data: SubmssionData[] = res.data.data;
         setListSubmission(data);
       }
     });
+  };
+
+  React.useEffect(() => {
+    fetchSubmissions();
   }, []);
   return (
     <Layout>
@@ -32,6 +36,7 @@ const Submission = ({ params }: SubmissionProps) => {
               <SubmissionAccordion
                 key={submission.student_id}
                 submission={submission}
+                fetchSubmissions={fetchSubmissions}
               />
             );
           })}

@@ -68,8 +68,8 @@ export type EditLessonPayload = {
 };
 
 export type Score = {
-  aspect: string;
-  score: string;
+  aspect?: string;
+  score?: number;
 };
 
 type CreateMaterialPayload = {

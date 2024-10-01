@@ -64,12 +64,12 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
 
     updateStudentAttendance(attendance.lesson_id, data)
       .then(() => {
-        toast.success("Grade submitted");
+        toast.success("Edited successfully");
         refetchData();
         handleClose();
       })
       .catch((res) => {
-        toast.error(res.response.data.message ?? "Failed submit grade");
+        toast.error(res.response.data.message ?? "Failed to edit");
       })
       .finally(() => {
         setIsLoading(false);
@@ -107,7 +107,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
             <FilePicker
               accept={"image/gif, image/jpeg, image/png, image/jpg"}
               multiple={false}
-              maxSize={0.5 * MB_UNIT}
+              maxSize={20 * MB_UNIT}
               onFilesSubmit={(files) => {
                 if (files.length > 0) {
                   onSubmit(attendance.attendance, files[0]);
