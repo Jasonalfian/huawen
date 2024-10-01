@@ -132,17 +132,23 @@ const SubmissionAccordion = ({ submission }: SubmissionAccordionProps) => {
             <p>Created at: {submission.submission_created_at}</p>
             <p>Updated at: {submission.submission_updated_at}</p>
             <p className="mt-2">
-              Description: {submission.submission_description}
+              Description: {submission.submission_description ?? "-"}
             </p>
-            <p
-              style={{
-                wordBreak: "break-word",
-                whiteSpace: "normal",
-              }}
-            >
-              File Url:{" "}
-              <Link href={submission.file_url}>{submission.file_url}</Link>
-            </p>
+            <p>File Url:</p>
+
+            {submission.file_url &&
+              submission.file_url.split(";").map((url) => {
+                return (
+                  <p
+                    style={{
+                      wordBreak: "break-word",
+                      whiteSpace: "normal",
+                    }}
+                  >
+                    <Link href={url}>{url}</Link>
+                  </p>
+                );
+              })}
           </div>
 
           <div className="mt-8">
@@ -243,6 +249,8 @@ const SubmissionAccordion = ({ submission }: SubmissionAccordionProps) => {
                 />
               </div>
               <div className="w-[50%] space-y-2">
+                <h1>Total Score: </h1>
+
                 <InputLabel>Feedback File</InputLabel>
                 <FilePicker
                   accept={ACCEPT_FILE}

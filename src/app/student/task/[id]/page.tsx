@@ -14,11 +14,17 @@ type TaskProps = {
 
 export default function Task({ params }: TaskProps) {
   const [listTask, setListTask] = React.useState<TaskData[]>([]);
+  const [taskType, setTaskType] = React.useState("EXAM");
 
   React.useEffect(() => {
     getTasks(params.id).then((res) => {
       if (res.data) {
-        setListTask(res.data.data);
+        const data: TaskData[] = res.data.data;
+
+        if (data && data.length > 0) {
+          setListTask(data);
+          setTaskType(data[0].task_type);
+        }
       }
     });
   }, []);
@@ -29,12 +35,16 @@ export default function Task({ params }: TaskProps) {
         <Link href={STUDENT_URL.HOME}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </Link>
-        Homework / Unit Review
+        {taskType}
       </h1>
 
-      {listTask.map((task) => {
-        return <TaskAccordion task={task} key={task.task_id} />;
-      })}
+      {listTask.length > 0 ? (
+        listTask.map((task) => {
+          return <TaskAccordion task={task} key={task.task_id} />;
+        })
+      ) : (
+        <p>No Task found</p>
+      )}
     </Layout>
   );
 }

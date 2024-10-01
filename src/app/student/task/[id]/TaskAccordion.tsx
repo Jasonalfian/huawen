@@ -27,7 +27,7 @@ type TaskAccordionProps = {
 
 export const TaskAccordion = ({ task }: TaskAccordionProps) => {
   const [taskScore, setTaskScore] = React.useState<TaskScoreData>();
-  const [file, setFile] = React.useState<File | null>(null);
+  const [files, setFiles] = React.useState<File[]>([]);
   const [submitUrl, setSubmitUrl] = React.useState(task.file_url);
   const [description, setDescription] = React.useState(task.description);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -55,9 +55,13 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
 
   const onSubmitTask = () => {
     setIsLoading(true);
-    if (file) {
+    if (files) {
       const formData = new FormData();
-      formData.append("fileToUpload", file);
+
+      files.forEach((file, index) => {
+        formData.append(`fileToUpload${index + 1}`, file);
+      });
+
       formData.append("description", description);
       submitTask(formData, task.task_id)
         .then((res) => {
@@ -72,7 +76,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
           }
         })
         .finally(() => {
-          setFile(null);
+          setFiles([]);
           setIsLoading(false);
         });
     }
@@ -130,7 +134,10 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
 
           <div className="flex flex-col md:flex-row gap-8">
             <div className="w-full">
-              <h2 className="text-xl mb-2 font-bold"> • Homework Submission</h2>
+              <h2 className="text-xl mb-2 font-bold">
+                {" "}
+                • {task.task_type} SUBMISSION
+              </h2>
               <TextField
                 id="outlined-basic"
                 label="description"
@@ -148,11 +155,12 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                 <div className="className=mt-2">
                   <FilePicker
                     accept={ACCEPT_FILE}
-                    multiple={false}
+                    multiple={true}
+                    max={5}
                     maxSize={20 * MB_UNIT}
                     onFilesSubmit={(files) => {
                       if (files.length > 0) {
-                        setFile(files[0]);
+                        setFiles(files);
                       }
                     }}
                   />
@@ -160,30 +168,35 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
               )}
 
               <div>
-                {file?.name ? (
-                  <p>{file.name}</p>
-                ) : (
-                  submitUrl && (
-                    <Link target="none" href={submitUrl}>
-                      <Button
-                        sx={{
-                          textDecoration: "underline",
-                          textAlign: "left",
-                          textTransform: "none",
-                        }}
-                        variant="text"
-                      >
-                        {submitUrl}
-                      </Button>
-                    </Link>
-                  )
-                )}
+                {files && files.length > 0
+                  ? files.map((file) => {
+                      return <p>{file.name}</p>;
+                    })
+                  : submitUrl &&
+                    submitUrl.split(";").map((url) => {
+                      return (
+                        <Link target="none" href={url}>
+                          <Button
+                            sx={{
+                              textDecoration: "underline",
+                              textAlign: "left",
+                              textTransform: "none",
+                              whiteSpace: "normal",
+                              wordBreak: "break-word",
+                            }}
+                            variant="text"
+                          >
+                            {url}
+                          </Button>
+                        </Link>
+                      );
+                    })}
               </div>
 
               <div className="flex justify-end">
                 <Button
                   sx={{ marginTop: "12px" }}
-                  disabled={file === null || isLoading}
+                  disabled={files === null || isLoading}
                   variant="contained"
                   onClick={onSubmitTask}
                 >
@@ -193,7 +206,9 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
             </div>
 
             <div className="w-full">
-              <h2 className="text-xl mb-2 font-bold">• Homework Feedback</h2>
+              <h2 className="text-xl mb-2 font-bold">
+                • {task.task_type} Feedback
+              </h2>
 
               {taskScore?.score.map((score) => {
                 return (
