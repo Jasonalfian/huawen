@@ -42,6 +42,21 @@ export type UploadFileData = {
   type: string;
 };
 
+export type SubmssionData = {
+  feedback_attachment_url: string;
+  feedback_created_at: string;
+  feedback_text: string;
+  feedback_updated_at: string;
+  file_url: string;
+  scores: Score[];
+  student_id: string;
+  student_name: string;
+  submission_created_at: string;
+  submission_description: string;
+  submission_updated_at: string;
+  task_id: string;
+};
+
 export type EditLessonPayload = {
   lesson_id: string;
   lesson_name: string;
@@ -50,6 +65,52 @@ export type EditLessonPayload = {
   end_time: string;
   zoom_link?: string;
   recording_link?: string;
+};
+
+export type Score = {
+  aspect: string;
+  score: string;
+};
+
+type CreateMaterialPayload = {
+  lesson_id: string;
+  description: string;
+  link: string;
+};
+
+type EditMaterialPayload = {
+  description: string;
+  link: string;
+  meta: string;
+};
+
+export type TASK_TYPE = "HOMEWORK" | "EXAM";
+
+export type CreateTaskPayload = {
+  lesson_id: string;
+  task_type: string;
+  title: string;
+  instruction: string;
+  link: string;
+  visible: number;
+  deadline: string;
+};
+
+export type EditTaskPayload = {
+  task_type: string;
+  title: string;
+  instruction: string;
+  task_link: string;
+  visible: number;
+  deadline: string;
+  meta: string;
+};
+
+export type GradeSubmissionPayload = {
+  student_id: string;
+  feedback_text: string;
+  attachment_url: string;
+  scores: Score[];
 };
 
 export const getLessons = () => {
@@ -93,40 +154,6 @@ export const uploadFile = (data: FormData) => {
     url: "teacher/uploadFile.php",
     data,
   });
-};
-
-type CreateMaterialPayload = {
-  lesson_id: string;
-  description: string;
-  link: string;
-};
-
-type EditMaterialPayload = {
-  description: string;
-  link: string;
-  meta: string;
-};
-
-export type TASK_TYPE = "HOMEWORK" | "EXAM";
-
-export type CreateTaskPayload = {
-  lesson_id: string;
-  task_type: string;
-  title: string;
-  instruction: string;
-  link: string;
-  visible: number;
-  deadline: string;
-};
-
-export type EditTaskPayload = {
-  task_type: string;
-  title: string;
-  instruction: string;
-  task_link: string;
-  visible: number;
-  deadline: string;
-  meta: string;
 };
 
 export const createMaterial = (data: CreateMaterialPayload) => {
@@ -186,5 +213,16 @@ export const editLessonRecording = (lessonId: string, recordingLink = "") => {
     data: {
       recording_link: recordingLink,
     },
+  });
+};
+
+export const gradeSubmission = (
+  taskId: string,
+  data: GradeSubmissionPayload[]
+) => {
+  return axios({
+    method: "post",
+    url: `/teacher/gradeSubmission.php?task_id=${taskId}`,
+    data,
   });
 };

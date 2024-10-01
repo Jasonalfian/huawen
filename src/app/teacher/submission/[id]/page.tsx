@@ -1,0 +1,46 @@
+"use client";
+
+import { SubmssionData, getSubmissions } from "@/client/teacher";
+import Layout from "@/components/layout";
+import React from "react";
+import SubmissionAccordion from "./SubmissionAccordion";
+
+type SubmissionProps = {
+  params: { id: string };
+};
+
+const Submission = ({ params }: SubmissionProps) => {
+  const [listSubmission, setListSubmission] = React.useState<SubmssionData[]>(
+    []
+  );
+
+  React.useEffect(() => {
+    getSubmissions(params.id).then((res) => {
+      if (res.data) {
+        const data: SubmssionData[] = res.data.data;
+        setListSubmission(data);
+      }
+    });
+  }, []);
+  return (
+    <Layout>
+      <h1 className="text-4xl my-6">Task Submission</h1>
+      {listSubmission.length > 0 ? (
+        <div className="space-y-4">
+          {listSubmission.map((submission) => {
+            return (
+              <SubmissionAccordion
+                key={submission.student_id}
+                submission={submission}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <p>No Submission submitted</p>
+      )}
+    </Layout>
+  );
+};
+
+export default Submission;

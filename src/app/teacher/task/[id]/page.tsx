@@ -11,7 +11,7 @@ import {
 } from "@/client/teacher";
 import Layout from "@/components/layout";
 import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
-import { ACCEPT_FILE, MODAL_STYLE } from "@/libs/constant";
+import { ACCEPT_FILE, MODAL_STYLE, TEACHER_URL } from "@/libs/constant";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Close } from "@mui/icons-material";
 import {
@@ -229,19 +229,36 @@ const TaskPage = ({ params }: TaskProps) => {
                   >
                     <div className="flex gap-4 justify-between w-full">
                       <p>{task.title}</p>
-                      <Button
-                        sx={{
-                          background: "black",
-                          height: "40px",
-                          width: "120px",
-                        }}
-                        variant="contained"
-                        onClick={() => {
-                          onSelectTask(task);
-                        }}
-                      >
-                        Detail
-                      </Button>
+                      <div className="space-x-2">
+                        <Button
+                          sx={{
+                            background: "black",
+                            height: "40px",
+                            width: "100px",
+                          }}
+                          variant="contained"
+                          onClick={() => {
+                            onSelectTask(task);
+                          }}
+                        >
+                          Detail
+                        </Button>
+
+                        <Link
+                          href={`${TEACHER_URL.SUBMISSION}/${task.task_id}`}
+                        >
+                          <Button
+                            sx={{
+                              background: "black",
+                              height: "40px",
+                              width: "140px",
+                            }}
+                            variant="contained"
+                          >
+                            Submission
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   </AccordionSummary>
                 </Accordion>

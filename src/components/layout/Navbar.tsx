@@ -132,7 +132,6 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
           {isTeacherPage && (
             <div className="flex flex-col">
               <MenuItem name="Home" route={TEACHER_URL.HOME} />
-              <MenuItem name="Announcement" route={TEACHER_URL.HOME} />
             </div>
           )}
         </div>

@@ -73,7 +73,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Submission
+            Attendance
           </Button>
         </Link>
       </div>

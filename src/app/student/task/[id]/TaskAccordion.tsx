@@ -28,8 +28,8 @@ type TaskAccordionProps = {
 export const TaskAccordion = ({ task }: TaskAccordionProps) => {
   const [taskScore, setTaskScore] = React.useState<TaskScoreData>();
   const [file, setFile] = React.useState<File | null>(null);
-  const [description, setDescription] = React.useState(task.description);
   const [submitUrl, setSubmitUrl] = React.useState(task.file_url);
+  const [description, setDescription] = React.useState(task.description);
   const [isLoading, setIsLoading] = React.useState(false);
 
   dayjs.extend(utc);
