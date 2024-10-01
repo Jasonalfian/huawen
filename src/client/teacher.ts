@@ -262,3 +262,13 @@ export const updateStudentAttendance = (
     data,
   });
 };
+
+export const removeMaterial = (materialId: string) => {
+  return axios({
+    method: "post",
+    url: `/teacher/removeMaterial.php`,
+    data: {
+      material_id: materialId,
+    },
+  });
+};

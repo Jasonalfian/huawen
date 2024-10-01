@@ -7,6 +7,7 @@ import {
   getLessonMaterials,
   uploadFile,
   UploadFileData,
+  removeMaterial,
 } from "@/client/teacher";
 import Layout from "@/components/layout";
 import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
@@ -53,6 +54,22 @@ const Material = ({ params }: MaterialProps) => {
   const [isEdit, setIsEdit] = React.useState(false);
   const [description, setDescription] = React.useState("");
 
+  const [expanded, setExpanded] = React.useState(false);
+
+  const [openRemove, setOpenRemove] = React.useState(false);
+  const [selectedMaterial, setSelectedMaterial] =
+    React.useState<MaterialData | null>(null);
+
+  const handleOpenRemove = (material: MaterialData) => {
+    setOpenRemove(true);
+    setSelectedMaterial(material);
+  };
+
+  const handleCloseRemove = () => {
+    setOpenRemove(false);
+    setSelectedMaterial(null);
+  };
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -86,6 +103,26 @@ const Material = ({ params }: MaterialProps) => {
         setIsLoading(false);
       });
     return;
+  };
+
+  const doRemoveMaterial = () => {
+    if (selectedMaterial) {
+      removeMaterial(selectedMaterial?.material_id)
+        .then(() => {
+          toast.success("Material removed");
+          fetchMaterials();
+        })
+        .catch((res) => {
+          if (res.response) {
+            toast.error(res.response.data.message);
+          } else {
+            toast.error("Failed removing material");
+          }
+        })
+        .finally(() => {
+          handleCloseRemove();
+        });
+    }
   };
 
   const onSubmitTask = () => {
@@ -146,10 +183,12 @@ const Material = ({ params }: MaterialProps) => {
           <h1 className="text-4xl my-6">Class Materials</h1>
           <Button
             sx={{
-              background: "black",
+              borderColor: "black",
+              color: "black",
               height: "40px",
+              width: "120px",
             }}
-            variant="contained"
+            variant="outlined"
             onClick={handleOpen}
           >
             Create +
@@ -161,44 +200,58 @@ const Material = ({ params }: MaterialProps) => {
             listMaterial.map((material) => {
               return (
                 <div key={material.material_id}>
-                  <Accordion>
+                  <Accordion
+                    expanded={expanded}
+                    onClick={() => {
+                      setExpanded(false);
+                    }}
+                  >
                     <AccordionSummary
-                      expandIcon={<ArrowDropDownIcon />}
-                      aria-controls="panel2-content"
-                      id="panel2-header"
+                      sx={{
+                        textAlign: "left",
+                        textTransform: "none",
+                        whiteSpace: "normal", // Allows the text to break
+                        wordBreak: "break-word", // Breaks words that are too long for one line
+                      }}
                     >
-                      <h2 className="font-semibold">{material.description}</h2>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      <div className="space-x-2">
-                        <Link target="none" href={material.link}>
+                      <div className="flex gap-4 justify-between w-full">
+                        <h2 className="font-semibold">
+                          {material.description}
+                        </h2>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                          <Button
+                            sx={{
+                              background: "maroon",
+                              width: "100px",
+                            }}
+                            variant="contained"
+                            onClick={() => {
+                              handleOpenRemove(material);
+                            }}
+                          >
+                            Remove
+                          </Button>
+
                           <Button
                             sx={{
                               background: "black",
+                              width: "100px",
                             }}
                             variant="contained"
+                            onClick={() => {
+                              handleOpen();
+                              setIsEdit(true);
+                              setMaterialId(material.material_id);
+                              setDescription(material.description);
+                              setSubmitUrl(material.link);
+                            }}
                           >
-                            Current task link
+                            Detail
                           </Button>
-                        </Link>
-
-                        <Button
-                          sx={{
-                            background: "black",
-                          }}
-                          variant="contained"
-                          onClick={() => {
-                            handleOpen();
-                            setIsEdit(true);
-                            setMaterialId(material.material_id);
-                            setDescription(material.description);
-                            setSubmitUrl(material.link);
-                          }}
-                        >
-                          Edit
-                        </Button>
+                        </div>
                       </div>
-                    </AccordionDetails>
+                    </AccordionSummary>
+                    <AccordionDetails></AccordionDetails>
                   </Accordion>
                 </div>
               );
@@ -208,6 +261,44 @@ const Material = ({ params }: MaterialProps) => {
           )}
         </div>
       </div>
+
+      <Modal
+        open={openRemove}
+        onClose={handleCloseRemove}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={MODAL_STYLE}>
+          <div className="flex flex-col justify-center">
+            <div className="flex text-center justify-center">
+              <h2>
+                Are you sure you want to remove
+                <br />
+                <span className="font-bold">
+                  {selectedMaterial?.description}
+                </span>
+              </h2>
+            </div>
+
+            <div className="flex justify-center mt-4 gap-4">
+              <Button
+                onClick={handleCloseRemove}
+                sx={{ background: "black" }}
+                variant="contained"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={doRemoveMaterial}
+                sx={{ background: "maroon" }}
+                variant="contained"
+              >
+                Yes
+              </Button>
+            </div>
+          </div>
+        </Box>
+      </Modal>
 
       <Modal
         open={open}
