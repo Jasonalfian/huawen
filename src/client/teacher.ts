@@ -113,6 +113,18 @@ export type GradeSubmissionPayload = {
   scores: Score[];
 };
 
+export type AttendanceData = {
+  attendance: number;
+  created_at: string;
+  evaluation: string;
+  lesson_id: string;
+  name: string;
+  profile_picture_url: string;
+  student_id: string;
+  updated_at: string;
+  username: string;
+};
+
 export const getLessons = () => {
   return axios({
     method: "get",
@@ -145,6 +157,13 @@ export const getSubmissions = (taskId: string) => {
   return axios({
     method: "get",
     url: `teacher/getSubmissions.php?task_id=${taskId}`,
+  });
+};
+
+export const getLessonStudent = (lessonId: string) => {
+  return axios({
+    method: "get",
+    url: `teacher/getLessonStudents.php?lesson_id=${lessonId}`,
   });
 };
 

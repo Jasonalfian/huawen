@@ -13,6 +13,7 @@ export const TEACHER_URL = {
   MATERIAL: "/teacher/material",
   TASK: "/teacher/task",
   SUBMISSION: "/teacher/submission",
+  ATTENDANCE: "/teacher/attendance",
 };
 
 export const ACCEPT_FILE =

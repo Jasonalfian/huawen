@@ -67,7 +67,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
             Task
           </Button>
         </Link>
-        <Link href={`${TEACHER_URL.SUBMISSION}/${data.lesson_id}`}>
+        <Link href={`${TEACHER_URL.ATTENDANCE}/${data.lesson_id}`}>
           <Button
             fullWidth
             sx={{ background: "var(--theme-red)" }}
