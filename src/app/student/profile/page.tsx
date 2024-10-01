@@ -76,7 +76,6 @@ const InfoPage = () => {
       education_job: data.education_job,
     })
       .then(() => {
-        console.log("masuk");
         toast.success("Profile updated");
       })
       .catch((res) => {

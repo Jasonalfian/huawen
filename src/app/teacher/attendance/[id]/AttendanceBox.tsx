@@ -21,8 +21,8 @@ import {
   Modal,
 } from "@mui/material";
 import React from "react";
-import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 type AttendanceProps = {
   attendance: AttendanceData;
@@ -30,14 +30,7 @@ type AttendanceProps = {
 };
 
 const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
-  const { control, getValues } = useForm<AttendanceData>({
-    mode: "onSubmit",
-    reValidateMode: "onChange",
-    defaultValues: attendance,
-  });
-
   const [open, setOpen] = React.useState(false);
-  const [file, setFile] = React.useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -46,10 +39,9 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
     setOpen(false);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (isTicked: number, file?: File) => {
     setIsLoading(true);
-    const formData = getValues();
-    let evaluationUrl = formData.evaluation;
+    let evaluationUrl = attendance.evaluation;
 
     if (file) {
       const formData = new FormData();
@@ -65,7 +57,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
     const data: AttendancePayload[] = [
       {
         student_id: attendance.student_id,
-        attendance: formData.attendance,
+        attendance: isTicked,
         evaluation: evaluationUrl,
       },
     ];
@@ -73,8 +65,8 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
     updateStudentAttendance(attendance.lesson_id, data)
       .then(() => {
         toast.success("Grade submitted");
-        setFile(null);
         refetchData();
+        handleClose();
       })
       .catch((res) => {
         toast.error(res.response.data.message ?? "Failed submit grade");
@@ -118,7 +110,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
               maxSize={0.5 * MB_UNIT}
               onFilesSubmit={(files) => {
                 if (files.length > 0) {
-                  setFile(files[0]);
+                  onSubmit(attendance.attendance, files[0]);
                 }
               }}
             />
@@ -126,44 +118,47 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
         </Box>
       </Modal>
       <p className="text-xl font-medium mb-4">{attendance.name}</p>
+      <div
+        style={{
+          width: "200px",
+          height: "200px",
+          position: "relative",
+        }}
+      >
+        <Image
+          src={
+            attendance.profile_picture_url
+              ? attendance.profile_picture_url
+              : "/img/blank-profile.jpeg"
+          }
+          alt="Display Picture"
+          fill
+          style={{ objectFit: "cover", borderRadius: "12px" }}
+          className="border-2"
+          priority
+        />
+      </div>
+
       <div className="space-x-2 mt-4">
         <FormControlLabel
           control={
-            <Controller
-              control={control}
-              name="attendance"
-              render={({ field }) => (
-                <Checkbox
-                  {...field}
-                  checked={field.value === 1}
-                  onChange={(e) => {
-                    console.log(e.target.checked);
-                    field.onChange(e.target.checked ? 1 : 0);
-                  }}
-                />
-              )}
+            <Checkbox
+              checked={attendance.attendance === 1}
+              disabled={isLoading}
+              onChange={(e) => {
+                onSubmit(e.target.checked ? 1 : 0);
+              }}
             />
           }
           label="Attend"
         />
 
         <Button
-          className="px-6"
           sx={{ color: "black", borderColor: "black" }}
           variant="outlined"
           onClick={handleOpen}
         >
           Evaluation
-        </Button>
-
-        <Button
-          sx={{ background: "black" }}
-          className="px-6"
-          variant="contained"
-          onClick={onSubmit}
-          disabled={isLoading}
-        >
-          Save
         </Button>
       </div>
 
@@ -174,13 +169,9 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
         }}
         className="mt-4"
       >
-        {file?.name ? (
-          <p>{file.name}</p>
-        ) : (
-          <Link href={attendance.evaluation}>
-            <p>{attendance.evaluation}</p>
-          </Link>
-        )}
+        <Link href={attendance.evaluation}>
+          <p>{attendance.evaluation}</p>
+        </Link>
       </div>
     </div>
   );

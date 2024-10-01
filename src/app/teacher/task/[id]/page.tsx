@@ -346,7 +346,6 @@ const TaskPage = ({ params }: TaskProps) => {
                       {...field}
                       checked={field.value === 1}
                       onChange={(e) => {
-                        console.log(e.target.checked);
                         field.onChange(e.target.checked ? 1 : 0);
                       }}
                     />

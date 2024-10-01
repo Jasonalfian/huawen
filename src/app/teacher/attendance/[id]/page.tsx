@@ -33,12 +33,11 @@ const Attendance = ({ params }: AttendanceProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-2">
           {listAttendance.map((attendance) => {
             return (
-              <>
-                <AttendanceBox
-                  refetchData={fetchAttendance}
-                  attendance={attendance}
-                />
-              </>
+              <AttendanceBox
+                key={attendance.student_id}
+                refetchData={fetchAttendance}
+                attendance={attendance}
+              />
             );
           })}
         </div>
