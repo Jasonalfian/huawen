@@ -21,6 +21,7 @@ const LessonInfo = ({ data }: LessonInfoProps) => {
   return (
     <>
       <h2 className="text-2xl mb-2">{data?.lesson_name ?? "-"}</h2>
+      <h2 className="text-l mb-1">{data?.description ?? "-"}</h2>
       <p>
         <EventNoteOutlinedIcon /> {data?.class_name ?? "-"}
       </p>
