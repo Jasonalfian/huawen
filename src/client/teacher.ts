@@ -69,7 +69,7 @@ export type EditLessonPayload = {
 
 export type Score = {
   aspect?: string;
-  score?: number;
+  score?: number | null;
 };
 
 type CreateMaterialPayload = {

@@ -37,7 +37,7 @@ type SubmissionAccordionProps = {
 // Define the types for the form data
 interface Score {
   aspect?: string;
-  score?: number;
+  score?: number | null;
 }
 
 interface FormValues {
@@ -57,7 +57,8 @@ const schema = yup.object().shape({
         .number()
         .typeError("Score must be a number")
         .min(1, "Score must be at least 1")
-        .max(100, "Score cannot be more than 100"),
+        .max(100, "Score cannot be more than 100")
+        .nullable(),
     })
   ),
 });
@@ -85,7 +86,7 @@ const SubmissionAccordion = ({
     );
     return {
       aspect,
-      score: foundScore ? Number(foundScore.score) : 0, // If not found, default to score 0
+      score: foundScore ? Number(foundScore.score) : null, // If not found, default to score 0
     };
   });
 
@@ -122,7 +123,6 @@ const SubmissionAccordion = ({
     },
   });
 
-  const [aspects, setAspects] = React.useState(defaultAspects);
   const [scores, setScores] = React.useState(
     defaultAspects.map((aspect) => ({ aspect, score: "" }))
   );
@@ -133,7 +133,7 @@ const SubmissionAccordion = ({
       newAspect &&
       !sortedAspects.some((aspect) => aspect.aspect === newAspect)
     ) {
-      const newScore = { aspect: newAspect, score: 0 }; // Default score for new aspect
+      const newScore = { aspect: newAspect, score: null }; // Default score for new aspect
       setSortedAspects([...sortedAspects, newScore]);
 
       const currentScores = getValues("scores");
@@ -203,6 +203,22 @@ const SubmissionAccordion = ({
   // Define the error handler with proper typing
   const onError: SubmitErrorHandler<FormValues> = (errors) => {
     toast.error("Please fix the errors");
+  };
+
+  const calculateAverageScore = () => {
+    const validScores = watch("scores")
+      ?.map((scoreObj) => scoreObj.score)
+      .filter((score) => score ?? 0 > 0); // Filter out null or 0 scores
+
+    if (validScores && validScores.length > 0) {
+      let sum = 0;
+      validScores.map((score) => {
+        sum = sum + Number(score);
+      });
+      const average = sum / validScores.length;
+      return average.toFixed(2);
+    }
+    return "-";
   };
 
   return (
@@ -297,7 +313,7 @@ const SubmissionAccordion = ({
               <Button onClick={addAspect}>Add Aspect</Button>
             </div>
             <div className="w-[50%] space-y-2">
-              <h1>Total Score: </h1>
+              <h1>Final Score: {calculateAverageScore()}</h1>
 
               <InputLabel>Feedback File</InputLabel>
               <FilePicker
