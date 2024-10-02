@@ -87,6 +87,15 @@ export type TaskScoreData = {
   score: Score[];
 };
 
+export type CertificateData = {
+  created_at: string;
+  id: string;
+  name: string;
+  student_id: string;
+  updated_at: string;
+  url: string;
+};
+
 export const getLessons = () => {
   return axios({
     method: "get",
@@ -141,6 +150,13 @@ export const getTaskScore = (taskId: string) => {
   return axios({
     method: "get",
     url: `student/getResult.php?task_id=${taskId}`,
+  });
+};
+
+export const getCertificates = () => {
+  return axios({
+    method: "get",
+    url: `student/getCertificates.php`,
   });
 };
 

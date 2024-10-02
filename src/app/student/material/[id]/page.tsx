@@ -53,19 +53,23 @@ export default function Material({ params }: MaterialProps) {
       <div>
         <h2 className="text-xl mb-2 font-bold"> • Class Materials</h2>
         <div className="flex flex-col max-w-max gap-2">
-          {listMaterial.map((material) => {
-            return (
-              <Link
-                target="none"
-                key={material.material_id}
-                href={material.link}
-              >
-                <Button sx={{ background: "black" }} variant="contained">
-                  {material.description}
-                </Button>
-              </Link>
-            );
-          })}
+          {listMaterial.length > 0 ? (
+            listMaterial.map((material) => {
+              return (
+                <Link
+                  target="none"
+                  key={material.material_id}
+                  href={material.link}
+                >
+                  <Button sx={{ background: "black" }} variant="contained">
+                    {material.description}
+                  </Button>
+                </Link>
+              );
+            })
+          ) : (
+            <p>No Material found</p>
+          )}
         </div>
       </div>
     </Layout>

@@ -29,7 +29,7 @@ import toast from "react-hot-toast";
 import * as yup from "yup";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-type SubmissionAccordionProps = {
+type ExamAccordionProps = {
   submission: SubmssionData;
   fetchSubmissions: () => void;
 };
@@ -72,10 +72,10 @@ const defaultAspects = [
   "writing",
 ];
 
-const SubmissionAccordion = ({
+const ExamAccordion = ({
   submission,
   fetchSubmissions,
-}: SubmissionAccordionProps) => {
+}: ExamAccordionProps) => {
   const [file, setFile] = React.useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
@@ -372,4 +372,4 @@ const SubmissionAccordion = ({
   );
 };
 
-export default SubmissionAccordion;
+export default ExamAccordion;

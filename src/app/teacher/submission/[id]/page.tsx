@@ -3,7 +3,7 @@
 import { SubmssionData, getSubmissions } from "@/client/teacher";
 import Layout from "@/components/layout";
 import React from "react";
-import SubmissionAccordion from "./SubmissionAccordion";
+import ExamAccordion from "./ExamAccordion";
 
 type SubmissionProps = {
   params: { id: string };
@@ -33,7 +33,7 @@ const Submission = ({ params }: SubmissionProps) => {
         <div className="space-y-4">
           {listSubmission.map((submission) => {
             return (
-              <SubmissionAccordion
+              <ExamAccordion
                 key={submission.student_id}
                 submission={submission}
                 fetchSubmissions={fetchSubmissions}
