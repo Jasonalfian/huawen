@@ -2,7 +2,7 @@
 
 import React from "react";
 import Divider from "@mui/material/Divider";
-import { Button, TextField } from "@mui/material";
+import { Button, Chip, TextField } from "@mui/material";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import Link from "next/link";
@@ -20,6 +20,29 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { ACCEPT_FILE } from "@/libs/constant";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  Filler
+);
 
 type TaskAccordionProps = {
   task: TaskData;
@@ -84,6 +107,52 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
 
   const taskDeadline = dayjs(task.deadline); // Start time
 
+  const labels = taskScore?.score.map((score) => score.aspect) ?? [];
+  const datasets = taskScore?.score.map((score) => score.score) ?? [];
+  const finalScore = (
+    (taskScore?.score.reduce((acc, obj) => acc + Number(obj.score), 0) ?? 0) /
+    (taskScore?.score.length ?? 0)
+  ).toFixed(2);
+
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        // Title of Graph
+        label: "Score",
+        data: datasets,
+        backgroundColor: ["rgba(255, 159, 64, 0.2)", "rgba(255, 205, 86, 0.2)"],
+        borderColor: ["rgb(255, 159, 64)", "rgb(255, 205, 86)"],
+        borderWidth: 1,
+        barPercentage: 1,
+        borderRadius: {
+          topLeft: 5,
+          topRight: 5,
+        },
+      },
+      // insert similar in dataset object for making multi bar chart
+    ],
+  };
+  const options = {
+    indexAxis: "y" as const,
+    scales: {
+      y: {
+        title: {
+          display: true,
+          // text: "Aspect",
+        },
+        beginAtZero: true,
+        max: 100,
+      },
+      x: {
+        title: {
+          display: true,
+          // text: "Score",
+        },
+      },
+    },
+  };
+
   return (
     <div className="mb-4">
       <Accordion>
@@ -97,7 +166,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
             color: "black",
             paddingY: "0.5rem",
             paddingX: "1rem",
-            backgroundColor: "var(--theme-yellow)",
+            backgroundColor: "var(--theme-cream)",
             borderRadius: "0.125rem",
           }}
         >
@@ -193,34 +262,29 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                     })}
               </div>
 
-              <div className="flex justify-end">
-                <Button
-                  sx={{ marginTop: "12px" }}
-                  disabled={files === null || isLoading}
-                  variant="contained"
-                  onClick={onSubmitTask}
-                >
-                  Submit
-                </Button>
-              </div>
+              {isBeforeDeadline && (
+                <div className="flex justify-end">
+                  <Button
+                    sx={{ marginTop: "12px" }}
+                    disabled={files === null || isLoading}
+                    variant="contained"
+                    onClick={onSubmitTask}
+                  >
+                    Submit
+                  </Button>
+                </div>
+              )}
             </div>
 
             <div className="w-full">
               <h2 className="text-xl mb-2 font-bold">
-                • {task.task_type} Feedback
+                • {task.task_type} FEEDBACK
               </h2>
 
-              {taskScore?.score.map((score) => {
-                return (
-                  <p key={score.aspect} className="mb-1">
-                    {score.aspect} :{" "}
-                    <span className="font-bold">{score.score}/100</span>
-                  </p>
-                );
-              })}
-
               <div className="text-black p-4 border-2 bg-theme-cream rounded-lg mb-4">
-                <p className="mb-2">{taskScore?.feedback.feedback_text}</p>
+                <p className="mb-2">
+                  {taskScore?.feedback.feedback_text ?? "No Feedback yet"}
+                </p>
                 {taskScore?.feedback.attachment_url && (
                   <Link target="none" href={taskScore?.feedback.attachment_url}>
                     <Button sx={{ textDecoration: "underline" }} variant="text">
@@ -229,6 +293,19 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                   </Link>
                 )}
               </div>
+
+              {taskScore?.score && (
+                <div className="w-full flex flex-col items-center">
+                  <Bar data={data} options={options} />
+                  <Chip
+                    color="success"
+                    sx={{
+                      fontSize: "16px",
+                    }}
+                    label={`Final Score: ${finalScore}`}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </AccordionDetails>

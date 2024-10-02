@@ -14,6 +14,7 @@ export const TEACHER_URL = {
   TASK: "/teacher/task",
   SUBMISSION: "/teacher/submission",
   ATTENDANCE: "/teacher/attendance",
+  UNGRADED_TASK: "/teacher/task/ungraded",
 };
 
 export const ACCEPT_FILE =

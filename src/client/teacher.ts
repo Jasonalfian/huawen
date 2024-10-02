@@ -37,6 +37,19 @@ export type TaskData = {
   visible: number;
 };
 
+export type UngradedTaskData = {
+  class_name: string;
+  description: string;
+  file_url: string;
+  initial_submission_data: string;
+  lesson_id: string;
+  lesson_name: string;
+  student_id: string;
+  student_name: string;
+  task_id: string;
+  updated_submission_date: string;
+};
+
 export type UploadFileData = {
   url: string;
   type: string;
@@ -170,6 +183,13 @@ export const getLessonStudent = (lessonId: string) => {
   return axios({
     method: "get",
     url: `teacher/getLessonStudents.php?lesson_id=${lessonId}`,
+  });
+};
+
+export const getUngradedSubmissions = () => {
+  return axios({
+    method: "get",
+    url: `teacher/getUngradedTasks.php`,
   });
 };
 
