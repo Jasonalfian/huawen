@@ -294,9 +294,11 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
                 )}
               </div>
 
-              {taskScore?.score && (
+              {taskScore?.score && taskScore.score.length > 0 && (
                 <div className="w-full flex flex-col items-center">
-                  <Bar data={data} options={options} />
+                  {task.task_type === "EXAM" && (
+                    <Bar data={data} options={options} />
+                  )}
                   <Chip
                     color="success"
                     sx={{

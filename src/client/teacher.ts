@@ -39,15 +39,17 @@ export type TaskData = {
 
 export type UngradedTaskData = {
   class_name: string;
-  description: string;
   file_url: string;
-  initial_submission_data: string;
   lesson_id: string;
   lesson_name: string;
   student_id: string;
   student_name: string;
+  submission_created_at: string;
+  submission_description: string;
+  submission_updated_at: string;
   task_id: string;
-  updated_submission_date: string;
+  task_type: string;
+  title: string;
 };
 
 export type UploadFileData = {
@@ -68,6 +70,7 @@ export type SubmssionData = {
   submission_description: string;
   submission_updated_at: string;
   task_id: string;
+  task_type: string;
 };
 
 export type EditLessonPayload = {

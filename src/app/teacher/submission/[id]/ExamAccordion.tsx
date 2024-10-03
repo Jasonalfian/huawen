@@ -55,6 +55,9 @@ const schema = yup.object().shape({
       aspect: yup.string(),
       score: yup
         .number()
+        .transform((value, originalValue) => {
+          return originalValue === "" ? null : value;
+        })
         .typeError("Score must be a number")
         .min(1, "Score must be at least 1")
         .max(100, "Score cannot be more than 100")

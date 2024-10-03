@@ -13,7 +13,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
-  IconButton,
   InputLabel,
   Link,
   TextField,
@@ -55,6 +54,9 @@ const schema = yup.object().shape({
       aspect: yup.string(),
       score: yup
         .number()
+        .transform((value, originalValue) => {
+          return originalValue === "" ? null : value;
+        })
         .typeError("Score must be a number")
         .min(1, "Score must be at least 1")
         .max(100, "Score cannot be more than 100")
@@ -63,14 +65,7 @@ const schema = yup.object().shape({
   ),
 });
 
-const defaultAspects = [
-  "comprehension",
-  "listening",
-  "pattern",
-  "reading",
-  "speaking",
-  "writing",
-];
+const defaultAspects = ["score"];
 
 const HomeworkAccordion = ({
   submission,
@@ -107,8 +102,6 @@ const HomeworkAccordion = ({
     watch,
     formState: { errors },
     handleSubmit,
-    getValues,
-    setValue,
   } = useForm<FormValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -126,38 +119,6 @@ const HomeworkAccordion = ({
   const [scores, setScores] = React.useState(
     defaultAspects.map((aspect) => ({ aspect, score: "" }))
   );
-
-  const addAspect = () => {
-    const newAspect = prompt("Enter new aspect:");
-    if (
-      newAspect &&
-      !sortedAspects.some((aspect) => aspect.aspect === newAspect)
-    ) {
-      const newScore = { aspect: newAspect, score: null }; // Default score for new aspect
-      setSortedAspects([...sortedAspects, newScore]);
-
-      const currentScores = getValues("scores");
-      if (currentScores) {
-        // Update form values
-        setValue("scores", [...currentScores, newScore]);
-      }
-    }
-  };
-
-  const handleRemoveAspect = (index: number) => {
-    const currentScores = getValues("scores");
-    // Remove the score at the given index
-
-    console.log(currentScores);
-    if (currentScores) {
-      const updatedScores = currentScores.filter((_, i) => i !== index);
-      setValue("scores", updatedScores);
-
-      // Update the sortedAspects state to remove the corresponding aspect
-      const updatedAspects = sortedAspects.filter((_, i) => i !== index);
-      setSortedAspects(updatedAspects);
-    }
-  };
 
   // Define the submit handler with proper typing
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -297,20 +258,8 @@ const HomeworkAccordion = ({
                       </>
                     )}
                   />
-                  {!defaultAspects.includes(aspect.aspect ?? "") && ( // Only show the delete button for custom aspects
-                    <IconButton
-                      onClick={() => handleRemoveAspect(index)}
-                      color="secondary"
-                      aria-label="remove aspect"
-                      style={{ marginLeft: "10px" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
                 </div>
               ))}
-
-              <Button onClick={addAspect}>Add Aspect</Button>
             </div>
             <div className="w-[50%] space-y-2">
               <h1>Final Score: {calculateAverageScore()}</h1>
