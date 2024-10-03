@@ -105,7 +105,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
           </IconButton>
           <div className="flex flex-col gap-4 ">
             <FilePicker
-              accept={"image/gif, image/jpeg, image/png, image/jpg"}
+              accept={"image/gif, image/jpeg, image/png, application/pdf, image/jpg, audio/mpeg"}
               multiple={false}
               maxSize={20 * MB_UNIT}
               onFilesSubmit={(files) => {
