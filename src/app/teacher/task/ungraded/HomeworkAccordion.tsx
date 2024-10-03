@@ -174,7 +174,7 @@ const HomeworkAccordion = ({
           color: "black",
         }}
       >
-        <h2>{`${submission.class_name} - ${submission.lesson_name} - ${submission.student_name}`}</h2>
+        <h2>{`${submission.class_name} - ${submission.lesson_name} - ${submission.title} - ${submission.student_name}`}</h2>
       </AccordionSummary>
       <AccordionDetails>
         <div>
