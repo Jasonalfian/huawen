@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
 import { Close } from "@mui/icons-material";
 import useGlobalStore from "@/libs/global";
-import { MODAL_STYLE } from "@/libs/constant";
+import { ACCEPT_FILE_BIO, MODAL_STYLE } from "@/libs/constant";
 
 const InfoPage = () => {
   const {
@@ -309,7 +309,7 @@ const InfoPage = () => {
             </IconButton>
             <div className="flex flex-col gap-4 ">
               <FilePicker
-                accept={"image/gif, image/jpeg, image/png, image/jpg"}
+                accept={ACCEPT_FILE_BIO}
                 multiple={false}
                 maxSize={0.5 * MB_UNIT}
                 onFilesSubmit={(files) => {

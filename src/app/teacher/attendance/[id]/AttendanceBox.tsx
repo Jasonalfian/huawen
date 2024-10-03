@@ -8,7 +8,7 @@ import {
   uploadFile,
 } from "@/client/teacher";
 import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
-import { MODAL_STYLE } from "@/libs/constant";
+import { ACCPET_FILE_EVALUATION, MODAL_STYLE } from "@/libs/constant";
 import { cn } from "@/utils/utils";
 import { Close } from "@mui/icons-material";
 import {
@@ -105,7 +105,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
           </IconButton>
           <div className="flex flex-col gap-4 ">
             <FilePicker
-              accept={"image/gif, image/jpeg, image/png, application/pdf, image/jpg, audio/mpeg"}
+              accept={ACCPET_FILE_EVALUATION}
               multiple={false}
               maxSize={20 * MB_UNIT}
               onFilesSubmit={(files) => {
