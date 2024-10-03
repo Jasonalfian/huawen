@@ -16,7 +16,7 @@ export default function Task({ params }: TaskProps) {
   const [listTask, setListTask] = React.useState<TaskData[]>([]);
   const [taskType, setTaskType] = React.useState("EXAM");
 
-  React.useEffect(() => {
+  const fetchTasks = () => {
     getTasks(params.id).then((res) => {
       if (res.data) {
         const data: TaskData[] = res.data.data;
@@ -27,6 +27,10 @@ export default function Task({ params }: TaskProps) {
         }
       }
     });
+  };
+
+  React.useEffect(() => {
+    fetchTasks();
   }, []);
 
   return (
@@ -40,7 +44,13 @@ export default function Task({ params }: TaskProps) {
 
       {listTask.length > 0 ? (
         listTask.map((task) => {
-          return <TaskAccordion task={task} key={task.task_id} />;
+          return (
+            <TaskAccordion
+              refetchTask={fetchTasks}
+              task={task}
+              key={task.task_id}
+            />
+          );
         })
       ) : (
         <p>No Task found</p>

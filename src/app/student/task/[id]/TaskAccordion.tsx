@@ -32,6 +32,7 @@ import {
   Filler,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { PriorityHigh } from "@mui/icons-material";
 
 ChartJS.register(
   CategoryScale,
@@ -46,9 +47,10 @@ ChartJS.register(
 
 type TaskAccordionProps = {
   task: TaskData;
+  refetchTask: () => void;
 };
 
-export const TaskAccordion = ({ task }: TaskAccordionProps) => {
+export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
   const [taskScore, setTaskScore] = React.useState<TaskScoreData>();
   const [files, setFiles] = React.useState<File[]>([]);
   const [submitUrl, setSubmitUrl] = React.useState(task.file_url);
@@ -90,6 +92,7 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
         .then((res) => {
           if (res.data) {
             setSubmitUrl(res.data.file_url);
+            refetchTask();
             toast.success("Submit Task Success");
           }
         })
@@ -161,16 +164,20 @@ export const TaskAccordion = ({ task }: TaskAccordionProps) => {
           aria-controls="panel2-content"
           id="panel2-header"
           sx={{
-            fontSize: "1.5rem",
+            fontSize: "1.2rem",
             fontWeight: 500,
-            color: "black",
+            color: task.submission_created_at ? "black" : "white",
             paddingY: "0.5rem",
             paddingX: "1rem",
-            backgroundColor: "var(--theme-cream)",
+            backgroundColor: task.submission_created_at
+              ? "var(--theme-cream)"
+              : "var(--theme-red)",
             borderRadius: "0.125rem",
           }}
         >
-          <h2>{task.title}</h2>
+          <h2>
+            {task.title} {!task.submission_created_at && <PriorityHigh />}
+          </h2>
         </AccordionSummary>
         <AccordionDetails>
           <div className="my-4 flex flex-col gap-2">

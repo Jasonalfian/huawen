@@ -12,6 +12,7 @@ export type LessonData = {
   zoom_link: string;
   evaluation: string;
   task_type: string;
+  need_attention: number;
 };
 
 export type AnnouncementData = {
@@ -61,6 +62,7 @@ export type TaskData = {
   lesson_name: string;
   meta: string;
   student_id: string;
+  submission_created_at: string;
   task_id: string;
   task_link: string;
   task_type: string;
