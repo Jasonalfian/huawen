@@ -61,7 +61,15 @@ export default function Material({ params }: MaterialProps) {
                   key={material.material_id}
                   href={material.link}
                 >
-                  <Button sx={{ background: "black" }} variant="contained">
+                  <Button
+                    fullWidth
+                    sx={{
+                      background: "black",
+                      textAlign: "left",
+                      justifyContent: "flex-start",
+                    }}
+                    variant="contained"
+                  >
                     {material.description}
                   </Button>
                 </Link>

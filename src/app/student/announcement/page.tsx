@@ -45,11 +45,18 @@ export default function AnnouncementPage() {
       <div style={{ height: "calc(100vh - var(--header-height) - 48px)" }}>
         <h1 className="text-4xl my-6">List of Announcement</h1>
         <div className="flex flex-col gap-4">
-          {listAnnouncement.map((data, index) => {
-            return (
-              <SingleAnnouncement key={`${data.title}-${index}`} data={data} />
-            );
-          })}
+          {listAnnouncement.length > 0 ? (
+            listAnnouncement.map((data, index) => {
+              return (
+                <SingleAnnouncement
+                  key={`${data.title}-${index}`}
+                  data={data}
+                />
+              );
+            })
+          ) : (
+            <p>No Announcement found</p>
+          )}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 bg-theme-red">

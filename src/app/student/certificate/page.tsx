@@ -26,12 +26,20 @@ const Certificate = () => {
         <h1>My Certificate </h1>
       </div>
 
-      <div className="my-8 flex flex-col gap-2">
+      <div className="my-8 flex flex-col max-w-max gap-2">
         {listCertificate.length > 0 ? (
           listCertificate.map((certificate) => {
             return (
               <Link target="none" key={certificate.id} href={certificate.url}>
-                <Button sx={{ background: "black" }} variant="contained">
+                <Button
+                  fullWidth
+                  sx={{
+                    background: "black",
+                    textAlign: "left",
+                    justifyContent: "flex-start",
+                  }}
+                  variant="contained"
+                >
                   {certificate.name}
                 </Button>
               </Link>
