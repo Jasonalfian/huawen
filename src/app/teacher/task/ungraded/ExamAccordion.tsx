@@ -1,6 +1,6 @@
 import {
   GradeSubmissionPayload,
-  SubmssionData,
+  UngradedTaskData,
   UploadFileData,
   gradeSubmission,
   uploadFile,
@@ -30,7 +30,7 @@ import * as yup from "yup";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 type ExamAccordionProps = {
-  submission: SubmssionData;
+  submission: UngradedTaskData;
   fetchSubmissions: () => void;
 };
 
@@ -84,26 +84,14 @@ const ExamAccordion = ({
 
   // Combine default aspects and scores from the backend
   const mergedScores = defaultAspects.map((aspect) => {
-    const foundScore = submission.scores.find(
-      (score) => score.aspect === aspect
-    );
     return {
       aspect,
-      score: foundScore ? Number(foundScore.score) : null, // If not found, default to score 0
+      score: null,
     };
   });
 
-  // Add custom aspects that are not part of the default aspects
-  const customAspects = submission.scores.filter(
-    (score) => !defaultAspects.includes(score.aspect ?? "")
-  );
-
-  // Combine mandatory aspects and custom aspects
-  const initialSortedAspects = [...mergedScores, ...customAspects];
-
   // Track sorted aspects in state
-  const [sortedAspects, setSortedAspects] =
-    React.useState(initialSortedAspects);
+  const [sortedAspects, setSortedAspects] = React.useState(mergedScores);
 
   const {
     control,
@@ -117,8 +105,8 @@ const ExamAccordion = ({
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      feedback_text: submission.feedback_text,
-      feedback_attachment_url: submission.feedback_attachment_url,
+      feedback_text: "",
+      feedback_attachment_url: "",
       scores: sortedAspects,
     },
   });

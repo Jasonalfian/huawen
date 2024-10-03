@@ -26,7 +26,6 @@ import {
 } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as yup from "yup";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 type HomeworkAccordionProps = {
   submission: SubmssionData;
@@ -109,10 +108,7 @@ const HomeworkAccordion = ({
     defaultValues: {
       feedback_text: submission.feedback_text,
       feedback_attachment_url: submission.feedback_attachment_url,
-      scores: sortedAspects.map((score) => ({
-        aspect: score.aspect,
-        score: score.score,
-      })),
+      scores: sortedAspects,
     },
   });
 

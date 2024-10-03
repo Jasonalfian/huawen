@@ -1,6 +1,6 @@
 import {
   GradeSubmissionPayload,
-  SubmssionData,
+  UngradedTaskData,
   UploadFileData,
   gradeSubmission,
   uploadFile,
@@ -13,7 +13,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Button,
-  IconButton,
   InputLabel,
   Link,
   TextField,
@@ -27,10 +26,9 @@ import {
 } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as yup from "yup";
-import DeleteIcon from "@mui/icons-material/Delete";
 
-type ExamAccordionProps = {
-  submission: SubmssionData;
+type HomeworkAccordionProps = {
+  submission: UngradedTaskData;
   fetchSubmissions: () => void;
 };
 
@@ -66,98 +64,45 @@ const schema = yup.object().shape({
   ),
 });
 
-const defaultAspects = [
-  "comprehension",
-  "listening",
-  "pattern",
-  "reading",
-  "speaking",
-  "writing",
-];
+const defaultAspects = ["score"];
 
-const ExamAccordion = ({
+const HomeworkAccordion = ({
   submission,
   fetchSubmissions,
-}: ExamAccordionProps) => {
+}: HomeworkAccordionProps) => {
   const [file, setFile] = React.useState<File | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Combine default aspects and scores from the backend
   const mergedScores = defaultAspects.map((aspect) => {
-    const foundScore = submission.scores.find(
-      (score) => score.aspect === aspect
-    );
     return {
       aspect,
-      score: foundScore ? Number(foundScore.score) : null, // If not found, default to score 0
+      score: null, // If not found, default to score 0
     };
   });
 
-  // Add custom aspects that are not part of the default aspects
-  const customAspects = submission.scores.filter(
-    (score) => !defaultAspects.includes(score.aspect ?? "")
-  );
-
-  // Combine mandatory aspects and custom aspects
-  const initialSortedAspects = [...mergedScores, ...customAspects];
-
   // Track sorted aspects in state
-  const [sortedAspects, setSortedAspects] =
-    React.useState(initialSortedAspects);
+  const [sortedAspects, setSortedAspects] = React.useState(mergedScores);
 
   const {
     control,
     watch,
     formState: { errors },
     handleSubmit,
-    getValues,
-    setValue,
   } = useForm<FormValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
     resolver: yupResolver(schema),
     defaultValues: {
-      feedback_text: submission.feedback_text,
-      feedback_attachment_url: submission.feedback_attachment_url,
-      scores: sortedAspects,
+      feedback_text: "",
+      feedback_attachment_url: "",
+      scores: mergedScores,
     },
   });
 
   const [scores, setScores] = React.useState(
     defaultAspects.map((aspect) => ({ aspect, score: "" }))
   );
-
-  const addAspect = () => {
-    const newAspect = prompt("Enter new aspect:");
-    if (
-      newAspect &&
-      !sortedAspects.some((aspect) => aspect.aspect === newAspect)
-    ) {
-      const newScore = { aspect: newAspect, score: null }; // Default score for new aspect
-      setSortedAspects([...sortedAspects, newScore]);
-
-      const currentScores = getValues("scores");
-      if (currentScores) {
-        // Update form values
-        setValue("scores", [...currentScores, newScore]);
-      }
-    }
-  };
-
-  const handleRemoveAspect = (index: number) => {
-    const currentScores = getValues("scores");
-    // Remove the score at the given index
-
-    console.log(currentScores);
-    if (currentScores) {
-      const updatedScores = currentScores.filter((_, i) => i !== index);
-      setValue("scores", updatedScores);
-
-      // Update the sortedAspects state to remove the corresponding aspect
-      const updatedAspects = sortedAspects.filter((_, i) => i !== index);
-      setSortedAspects(updatedAspects);
-    }
-  };
 
   // Define the submit handler with proper typing
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
@@ -229,7 +174,7 @@ const ExamAccordion = ({
           color: "black",
         }}
       >
-        <h2>{submission.student_name}</h2>
+        <h2>{`${submission.class_name} - ${submission.lesson_name} - ${submission.student_name}`}</h2>
       </AccordionSummary>
       <AccordionDetails>
         <div>
@@ -297,20 +242,8 @@ const ExamAccordion = ({
                       </>
                     )}
                   />
-                  {!defaultAspects.includes(aspect.aspect ?? "") && ( // Only show the delete button for custom aspects
-                    <IconButton
-                      onClick={() => handleRemoveAspect(index)}
-                      color="secondary"
-                      aria-label="remove aspect"
-                      style={{ marginLeft: "10px" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  )}
                 </div>
               ))}
-
-              <Button onClick={addAspect}>Add Aspect</Button>
             </div>
             <div className="w-[50%] space-y-2">
               <h1>Final Score: {calculateAverageScore()}</h1>
@@ -372,4 +305,4 @@ const ExamAccordion = ({
   );
 };
 
-export default ExamAccordion;
+export default HomeworkAccordion;
