@@ -8,19 +8,23 @@ import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Toaster } from "react-hot-toast";
 import { FORGOT_PASSWORD_URL, ROOT } from "@/libs/constant";
+import TranslationProvider from "@/libs/translation/TranslationProvider";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { token, initializeToken } = useGlobalStore();
+  const { token, initializeToken, lang } = useGlobalStore();
   const [isHomePage, setIsHomePage] = React.useState(false);
 
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       initializeToken();
-      setIsHomePage(window.location.pathname === ROOT || window.location.pathname.startsWith(FORGOT_PASSWORD_URL));
+      setIsHomePage(
+        window.location.pathname === ROOT ||
+          window.location.pathname.startsWith(FORGOT_PASSWORD_URL)
+      );
     }
   }, []);
 
@@ -44,11 +48,11 @@ export default function RootLayout({
   }
 
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body className={cn(`antialiased`, fonts.inter.className)}>
         {isHomePage || token ? (
           <>
-            {children}
+            <TranslationProvider locale={lang}>{children}</TranslationProvider>
             <Toaster />
           </>
         ) : (

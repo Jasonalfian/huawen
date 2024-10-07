@@ -2,10 +2,10 @@
 
 import Layout from "@/components/layout";
 import Link from "next/link";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import React from "react";
 import { CertificateData, getCertificates } from "@/client/student";
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Certificate = () => {
   const [listCertificate, setListCertificate] = React.useState<
@@ -20,10 +20,12 @@ const Certificate = () => {
     });
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <div className="text-2xl font-medium text-black p-4 border-2 bg-theme-yellow rounded-lg">
-        <h1>My Certificate </h1>
+        <h1>{t("account.my_certificate")}</h1>
       </div>
 
       <div className="my-8 flex flex-col max-w-max gap-2">
@@ -46,7 +48,7 @@ const Certificate = () => {
             );
           })
         ) : (
-          <p>No Certificate found</p>
+          <p>{t("common.no_data")}</p>
         )}
       </div>
     </Layout>

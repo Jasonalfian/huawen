@@ -5,13 +5,13 @@ import Button from "@mui/material/Button";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useGlobalStore from "@/libs/global";
 import { postForgot } from "@/client/login";
 import { ForgotFormData, forgotFormSchema } from "../../modules/Login/schema";
 import Layout from "@/components/layout";
 import Turnstile, { useTurnstile } from "react-turnstile";
 import { ROOT } from "@/libs/constant";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function Forgot() {
   const router = useRouter();
@@ -30,7 +30,6 @@ export default function Forgot() {
     resolver: yupResolver(forgotFormSchema),
   });
 
-  const { login } = useGlobalStore();
   const [isLoading, setIsLoading] = React.useState(false);
   const turnstile = useTurnstile();
 
@@ -70,6 +69,7 @@ export default function Forgot() {
   const [turnstileStatus, setTurnstileStatus] = React.useState<
     "success" | "error" | "expired" | "required"
   >("required");
+  const { t } = useTranslation();
 
   return (
     <Layout isLandingPage>
@@ -78,14 +78,16 @@ export default function Forgot() {
           className="flex flex-col items-center gap-4 "
           style={{ width: "100%", maxWidth: "400px" }}
         >
-          <h1 className="text-4xl font-medium mb-2">Forgot Password?</h1>
+          <h1 className="text-4xl font-medium mb-2">
+            {t("common.forgot_password")}
+          </h1>
           <Controller
             control={control}
             name="username"
             render={({ field }) => (
               <TextField
                 id="outlined-basic"
-                label="Username / Email"
+                label={t("common.username_email")}
                 variant="outlined"
                 error={errors.username != null}
                 helperText={errors.username?.message ?? ""}
@@ -124,7 +126,7 @@ export default function Forgot() {
             sx={{ height: "50px", background: "black" }}
             disabled={isLoading}
           >
-            Submit
+            {t("common.submit")}
           </Button>
         </div>
       </div>

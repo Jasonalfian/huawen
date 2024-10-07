@@ -13,9 +13,11 @@ interface GlobalStore {
   token: string | null;
   loginData: LoginData | null;
   profilePicUrl: string | null;
+  lang: string;
   login: (newToken: string, loginData: LoginData) => void;
   logout: () => void;
   updateProfilePic: (url: string) => void;
+  updateLanguage: (lang: string) => void;
   initializeToken: () => void;
 }
 
@@ -29,6 +31,7 @@ const useGlobalStore = create<GlobalStore>((set) => ({
   token: null,
   loginData: null,
   profilePicUrl: null,
+  lang: "en",
   login: (newToken, loginData) => {
     localStorage.setItem("token", newToken);
     localStorage.setItem("loginData", JSON.stringify(loginData));
@@ -54,12 +57,16 @@ const useGlobalStore = create<GlobalStore>((set) => ({
     localStorage.setItem("profilePicUrl", url);
     set({ profilePicUrl: url });
   },
+  updateLanguage: (lang: string) => {
+    localStorage.setItem("lang", lang);
+    set({ lang: lang });
+  },
   initializeToken: () => {
     const pathname = window.location.pathname;
-
     const storedToken = getLocalStorageItem("token");
     const storedLoginData = getLocalStorageItem("loginData");
     const storedProfilePicUrl = getLocalStorageItem("profilePicUrl");
+    const storedLanguage = getLocalStorageItem("lang");
 
     const parsedLoginData = storedLoginData
       ? JSON.parse(storedLoginData)
@@ -78,6 +85,12 @@ const useGlobalStore = create<GlobalStore>((set) => ({
           return;
         }
       }
+    }
+
+    if (storedLanguage) {
+      set({ lang: storedLanguage });
+    } else {
+      set({ lang: "en" });
     }
 
     if (storedToken && storedLoginData) {

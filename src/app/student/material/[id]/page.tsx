@@ -13,6 +13,7 @@ import {
 } from "@/client/student";
 import Button from "@mui/material/Button";
 import { STUDENT_URL } from "@/libs/constant";
+import { useTranslation } from "react-i18next";
 
 type MaterialProps = {
   params: { id: string };
@@ -37,13 +38,15 @@ export default function Material({ params }: MaterialProps) {
     });
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <h1 className="text-4xl mt-6">
         <Link href={STUDENT_URL.HOME}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </Link>
-        Class Materials
+        {t("material.class")}
       </h1>
 
       <div className="my-8 flex flex-col gap-1">
@@ -51,7 +54,7 @@ export default function Material({ params }: MaterialProps) {
       </div>
 
       <div>
-        <h2 className="text-xl mb-2 font-bold"> • Class Materials</h2>
+        <h2 className="text-xl mb-2 font-bold"> • {t("material.class")}</h2>
         <div className="flex flex-col max-w-max gap-2">
           {listMaterial.length > 0 ? (
             listMaterial.map((material) => {
@@ -76,7 +79,7 @@ export default function Material({ params }: MaterialProps) {
               );
             })
           ) : (
-            <p>No Material found</p>
+            <p>{t("common.no_data")}</p>
           )}
         </div>
       </div>

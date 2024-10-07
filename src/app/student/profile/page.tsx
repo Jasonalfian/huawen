@@ -25,6 +25,7 @@ import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
 import { Close } from "@mui/icons-material";
 import useGlobalStore from "@/libs/global";
 import { ACCEPT_FILE_BIO, MODAL_STYLE } from "@/libs/constant";
+import { useTranslation } from "react-i18next";
 
 const InfoPage = () => {
   const {
@@ -76,11 +77,11 @@ const InfoPage = () => {
       education_job: data.education_job,
     })
       .then(() => {
-        toast.success("Profile updated");
+        toast.success(t("common.save"));
       })
       .catch((res) => {
         if (res.response.data) {
-          toast.error(res.response.data.message ?? "Failed update");
+          toast.error(res.response.data.message ?? t("common.fail_submit"));
         }
       })
       .finally(() => {
@@ -101,14 +102,12 @@ const InfoPage = () => {
               `${res.data.profile_picture_url}?t=${cacheBuster}`
             );
           }
-          toast.success("Display picture updated");
+          toast.success(t("common.success_submit"));
           handleClose();
         })
         .catch((res) => {
           if (res.response.data) {
-            toast.error(
-              res.response.data.message ?? "Failed uploading picture"
-            );
+            toast.error(res.response.data.message ?? t("common.fail_submit"));
           }
           setPicture(null);
         })
@@ -128,15 +127,17 @@ const InfoPage = () => {
     setOpen(false);
   };
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <div className="text-2xl font-medium text-black p-4 border-2 bg-theme-yellow rounded-lg mb-4">
-        <h1>Student Information</h1>
+        <h1>{t("account.student_info")}</h1>
       </div>
       <div className="space-y-4">
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-[23%]">
-            <p>Display Picture</p>
+            <p>{t("profile.picture")}</p>
           </div>
           <div onClick={handleOpen}>
             {profilePicUrl ? (
@@ -149,14 +150,14 @@ const InfoPage = () => {
                 style={{ height: "auto", width: "auto" }}
               />
             ) : (
-              <Button>Add Image</Button>
+              <Button>{t("profile.add_image")}</Button>
             )}
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-[30%]">
-            <p>Gender</p>
+            <p>{t("profile.gender")}</p>
           </div>
           <FormControl fullWidth>
             <Controller
@@ -169,9 +170,9 @@ const InfoPage = () => {
                     field.onChange(e.target.value);
                   }}
                 >
-                  <MenuItem value={"male"}>Male</MenuItem>
-                  <MenuItem value={"female"}>Female</MenuItem>
-                  <MenuItem value={"other"}>Other</MenuItem>
+                  <MenuItem value={"male"}>{t("gender.male")}</MenuItem>
+                  <MenuItem value={"female"}>{t("gender.female")}</MenuItem>
+                  <MenuItem value={"other"}>{t("gender.other")}</MenuItem>
                 </Select>
               )}
             />
@@ -180,7 +181,7 @@ const InfoPage = () => {
 
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-[30%]">
-            <p>Name</p>
+            <p>{t("profile.name")}</p>
           </div>
 
           <Controller
@@ -190,8 +191,8 @@ const InfoPage = () => {
               <TextField
                 id="outlined-basic"
                 variant="outlined"
-                error={errors.name != null}
-                helperText={errors.name?.message ?? ""}
+                error={!!errors.name}
+                helperText={errors.name?.message ? t(errors.name.message) : ""}
                 {...field}
                 fullWidth
                 disabled
@@ -202,7 +203,7 @@ const InfoPage = () => {
 
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-[30%]">
-            <p>Age</p>
+            <p>{t("profile.age")}</p>
           </div>
           <Controller
             control={control}
@@ -211,8 +212,8 @@ const InfoPage = () => {
               <TextField
                 id="outlined-basic"
                 variant="outlined"
-                error={errors.age != null}
-                helperText={errors.age?.message ?? ""}
+                error={!!errors.age}
+                helperText={errors.age?.message ? t(errors.age.message) : ""}
                 {...field}
                 fullWidth
               />
@@ -222,7 +223,7 @@ const InfoPage = () => {
 
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-[30%]">
-            <p>Phone Number </p>
+            <p>{t("profile.phone")}</p>
           </div>
           <Controller
             control={control}
@@ -231,8 +232,12 @@ const InfoPage = () => {
               <TextField
                 id="outlined-basic"
                 variant="outlined"
-                error={errors.phone_number != null}
-                helperText={errors.phone_number?.message ?? ""}
+                error={!!errors.phone_number}
+                helperText={
+                  errors.phone_number?.message
+                    ? t(errors.phone_number.message)
+                    : ""
+                }
                 {...field}
                 fullWidth
               />
@@ -242,7 +247,7 @@ const InfoPage = () => {
 
         <div className="flex flex-col md:flex-row">
           <div className="w-full md:w-[30%]">
-            <p>Education/Job</p>
+            <p>{t("profile.job")}</p>
           </div>
           <Controller
             control={control}
@@ -251,8 +256,12 @@ const InfoPage = () => {
               <TextField
                 id="outlined-basic"
                 variant="outlined"
-                error={errors.education_job != null}
-                helperText={errors.education_job?.message ?? ""}
+                error={!!errors.education_job}
+                helperText={
+                  errors.education_job?.message
+                    ? t(errors.education_job.message)
+                    : ""
+                }
                 {...field}
                 fullWidth
               />
@@ -262,7 +271,7 @@ const InfoPage = () => {
 
         <div className="flex flex-col md:flex-row">
           <div className="mb-3 w-full md:w-[23%]">
-            <p>Since when did you learn chinese?</p>
+            <p>{t("profile.since")}</p>
           </div>
 
           <Controller
@@ -272,7 +281,7 @@ const InfoPage = () => {
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   views={["year"]}
-                  label="Year only"
+                  label={t("profile.year_only")}
                   value={field.value ? dayjs().year(field.value) : null}
                   onChange={(newValue) => {
                     field.onChange(newValue ? newValue.year() : null); // Update with the selected year
@@ -290,7 +299,7 @@ const InfoPage = () => {
             className="px-6"
             variant="contained"
           >
-            Save
+            {t("common.save")}
           </Button>
         </div>
         <Modal
@@ -348,7 +357,7 @@ const InfoPage = () => {
                 variant="contained"
                 disabled={picture === null || isLoadingPicture}
               >
-                Save Picture
+                {t("common.save")}
               </Button>
             </div>
           </Box>

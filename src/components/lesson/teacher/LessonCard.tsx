@@ -6,6 +6,7 @@ import EventNoteOutlinedIcon from "@mui/icons-material/EventNoteOutlined";
 import QueryBuilderOutlinedIcon from "@mui/icons-material/QueryBuilderOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 type LessonCardProps = {
   data: LessonData;
@@ -16,6 +17,8 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
   const formattedTime = `${dayjs(data.start_time).format(
     "DD MMMM YYYY HH:mm"
   )} - ${dayjs(data.end_time).format("HH:mm")}`;
+
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-1 w-full bg-theme-cream border-2 rounded-lg p-4">
       <div className="flex justify-between w-full">
@@ -27,7 +30,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
           sx={{ background: "black" }}
           variant="contained"
         >
-          Edit
+          {t("common.edit")}
         </Button>
       </div>
       <p>
@@ -46,7 +49,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Class Materials
+            {t("material.class")}
           </Button>
         </Link>
         <Link target="none" href={data.zoom_link}>
@@ -55,7 +58,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Join Class
+            {t("lesson.card.class")}
           </Button>
         </Link>
         <Link href={`${TEACHER_URL.TASK}/${data.lesson_id}`}>
@@ -64,7 +67,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Task
+            {t("common.task")}
           </Button>
         </Link>
         <Link href={`${TEACHER_URL.ATTENDANCE}/${data.lesson_id}`}>
@@ -73,7 +76,7 @@ const LessonCard = ({ data, handleOpen }: LessonCardProps) => {
             sx={{ background: "var(--theme-red)" }}
             variant="contained"
           >
-            Attendance
+            {t("lesson.attendance")}
           </Button>
         </Link>
       </div>

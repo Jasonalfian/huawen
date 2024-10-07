@@ -4,6 +4,7 @@ import styles from "./FilePicker.module.css";
 import { fileAccepts } from "./utils";
 import toast from "react-hot-toast";
 import { Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 export const MB_UNIT = 10 ** 6;
 
@@ -40,6 +41,7 @@ const FilePicker = ({
 }: FileUploadProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [highlight, setHighlight] = useState(false);
+  const { t } = useTranslation();
 
   const maxSizeToString = (maxSize: number, unit: "MB") => {
     let result = "";
@@ -66,7 +68,9 @@ const FilePicker = ({
 
   const fileFilter = (file: File) => {
     if (file.size > maxSize) {
-      toast.error(`File size more than ${maxSizeToString(maxSize, "MB")}`);
+      toast.error(
+        `${t("uploader.more_than")} ${maxSizeToString(maxSize, "MB")}`
+      );
     }
     return (
       fileAccepts({ name: file.name, type: file.type }, accept) &&
@@ -142,15 +146,15 @@ const FilePicker = ({
         type="file"
         multiple={multiple}
       />
-      <p>{description || "Drag and Drop to upload File here"}</p>
-      <p>or</p>
+      <p>{description || t("uploader.dragdrop")}</p>
+      <p>{t("common.or")}</p>
       <Button
         disabled={disabled}
         onClick={onButtonClick}
         type="button"
         id={buttonId}
       >
-        Browse to upload
+        {t("uploader.browse")}
       </Button>
     </div>
   );

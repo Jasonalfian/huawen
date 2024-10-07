@@ -3,7 +3,9 @@
 import { LessonData, getLessons } from "@/client/student";
 import Layout from "@/components/layout";
 import LessonCard from "@/components/lesson/student/LessonCard";
+import { t } from "i18next";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
   const [listLesson, setListLesson] = React.useState<LessonData[]>([]);
@@ -27,21 +29,30 @@ export default function HomePage() {
     });
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <div className="flex flex-col gap-2">
         <div className="flex text-black items-center p-2 justify-between h-10 w-60 border-2 border-theme-yellow rounded-lg">
-          <p>Attendance</p>
+          <p>{t("lesson.attendance")}</p>
           <p>
-            {totalAttend}/{listLesson.filter((lessonData) => {return new Date(lessonData.start_time) < new Date()}).length}
+            {totalAttend}/
+            {
+              listLesson.filter((lessonData) => {
+                return new Date(lessonData.start_time) < new Date();
+              }).length
+            }
           </p>
         </div>
         <div className="flex text-black items-center p-2 justify-between h-10 w-60 border-2 border-theme-yellow  rounded-lg">
-          <p>Schedule/Lessons</p>
+          <p>
+            {t("lesson.schedule")}/{t("lesson.lessons")}
+          </p>
           <p>{listLesson.length}</p>
         </div>
       </div>
-      <h1 className="text-4xl mt-6 mb-4">Lessons</h1>
+      <h1 className="text-4xl mt-6 mb-4">{t("lesson.lessons")}</h1>
 
       <div className="flex flex-col gap-4">
         {listLesson.map((lesson, index) => {

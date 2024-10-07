@@ -5,6 +5,7 @@ import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import React from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { AnnouncementData, getAnnouncements } from "@/client/student";
+import { useTranslation } from "react-i18next";
 
 export default function AnnouncementPage() {
   const [listAnnouncement, setListAnnouncement] = React.useState<
@@ -40,10 +41,12 @@ export default function AnnouncementPage() {
     );
   };
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <div style={{ height: "calc(100vh - var(--header-height) - 48px)" }}>
-        <h1 className="text-4xl my-6">List of Announcement</h1>
+        <h1 className="text-4xl my-6">{t("announcement.list")}</h1>
         <div className="flex flex-col gap-4">
           {listAnnouncement.length > 0 ? (
             listAnnouncement.map((data, index) => {
@@ -55,15 +58,13 @@ export default function AnnouncementPage() {
               );
             })
           ) : (
-            <p>No Announcement found</p>
+            <p>{t("common.no_data")}</p>
           )}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 bg-theme-red">
           <p className="text-sm text-white text-center p-4">
-            * National public holiday will be considered as a holiday for all
-            classes in Huawen. The class will be adjusted to another date (a day
-            after or before).
+            {`* ${t("announcement.disclaimer")}`}
           </p>
         </div>
       </div>

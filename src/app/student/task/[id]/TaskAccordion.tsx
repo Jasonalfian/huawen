@@ -33,6 +33,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { PriorityHigh } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 ChartJS.register(
   CategoryScale,
@@ -56,6 +57,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
   const [submitUrl, setSubmitUrl] = React.useState(task.file_url);
   const [description, setDescription] = React.useState(task.description);
   const [isLoading, setIsLoading] = React.useState(false);
+  const { t } = useTranslation();
 
   dayjs.extend(utc);
   dayjs.extend(timezone);
@@ -93,12 +95,12 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
           if (res.data) {
             setSubmitUrl(res.data.file_url);
             refetchTask();
-            toast.success("Submit Task Success");
+            toast.success(t("common.success_submit"));
           }
         })
         .catch((res) => {
           if (res.response.data) {
-            toast.error(res.response.data.message ?? "Failed uploading task");
+            toast.error(res.response.data.message ?? t("common.fail_submit"));
           }
         })
         .finally(() => {
@@ -182,7 +184,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
         <AccordionDetails>
           <div className="my-4 flex flex-col gap-2">
             <p>
-              <TimerOutlinedIcon /> Deadline submission:{" "}
+              <TimerOutlinedIcon /> {t("task.deadline_submission")}:{" "}
               {taskDeadline.format("DD MMMM YYYY HH:mm")}
             </p>
             <p>
@@ -197,7 +199,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
 
               <Link target="none" href={task.task_link}>
                 <Button sx={{ textDecoration: "underline" }} variant="text">
-                  Attachment
+                  {t("task.attachment")}
                 </Button>
               </Link>
             </div>
@@ -212,11 +214,11 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
             <div className="w-full">
               <h2 className="text-xl mb-2 font-bold">
                 {" "}
-                • {task.task_type} SUBMISSION
+                • {task.task_type} {t("task.submission").toUpperCase()}
               </h2>
               <TextField
                 id="outlined-basic"
-                label="description"
+                label={t("common.description")}
                 variant="outlined"
                 value={description}
                 multiline
@@ -277,7 +279,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
                     variant="contained"
                     onClick={onSubmitTask}
                   >
-                    Submit
+                    {t("common.submit")}
                   </Button>
                 </div>
               )}
@@ -285,17 +287,17 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
 
             <div className="w-full">
               <h2 className="text-xl mb-2 font-bold">
-                • {task.task_type} FEEDBACK
+                • {task.task_type} {t("task.feedback").toUpperCase()}
               </h2>
 
               <div className="text-black p-4 border-2 bg-theme-cream rounded-lg mb-4">
                 <p className="mb-2">
-                  {taskScore?.feedback.feedback_text ?? "No Feedback yet"}
+                  {taskScore?.feedback.feedback_text ?? t("common.no_data")}
                 </p>
                 {taskScore?.feedback.attachment_url && (
                   <Link target="none" href={taskScore?.feedback.attachment_url}>
                     <Button sx={{ textDecoration: "underline" }} variant="text">
-                      Attachment
+                      {t("task.attachment")}
                     </Button>
                   </Link>
                 )}

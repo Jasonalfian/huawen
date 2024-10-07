@@ -29,17 +29,65 @@ const RightBar = (props: RightBarProps) => {
       padding: 0,
     },
   }));
+
+  const { updateLanguage } = useGlobalStore();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleClick = () => {
+    // Toggle the tooltip on click
+    setOpen(!open);
+  };
+
+  const selectLanguage = (lang: string) => {
+    updateLanguage(lang);
+    handleTooltipClose();
+  };
+
   return (
     <div className="space-x-2">
       <HtmlTooltip
+        open={open}
+        onClose={handleTooltipClose}
+        onClick={handleClick}
         placement={hideAccount ? "bottom-start" : "bottom"}
         title={
           <React.Fragment>
             <div className="text-sm text-center">
-              <p className="p-2 border-b-2">English</p>
-              <p className="p-2 border-b-2">简体中文</p>
-              <p className="p-2 border-b-2">Bahasa Indonesia</p>
-              <p className="p-2">繁體中文</p>
+              <p
+                onClick={() => selectLanguage("en")}
+                className="p-2 border-b-2"
+              >
+                English
+              </p>
+              <p
+                onClick={() => {
+                  selectLanguage("cn");
+                }}
+                className="p-2 border-b-2"
+              >
+                简体中文
+              </p>
+              <p
+                onClick={() => {
+                  selectLanguage("id");
+                }}
+                className="p-2 border-b-2"
+              >
+                Bahasa Indonesia
+              </p>
+              <p
+                onClick={() => {
+                  selectLanguage("tw");
+                }}
+                className="p-2"
+              >
+                繁體中文
+              </p>
             </div>
           </React.Fragment>
         }

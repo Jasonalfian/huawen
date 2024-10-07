@@ -11,6 +11,7 @@ import {
   STUDENT_URL,
   TEACHER_URL,
 } from "@/libs/constant";
+import { useTranslation } from "react-i18next";
 
 type MenuItemProps = {
   route: string;
@@ -24,6 +25,7 @@ type NavbarProps = {
 };
 
 export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const isStudentPage = pathname.includes(ROLE_STUDENT.toLowerCase());
   const isTeacherPage = pathname.includes(ROLE_TEACHER.toLowerCase());
@@ -49,7 +51,7 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
         className={`flex gap-1 [&>*]:my-auto text-md py-3 border-b-2 ${colorClass}`}
       >
         <div className="text-xl flex [&>*]:mx-auto w-[30px]"></div>
-        <div>{name}</div>
+        <div>{t(name)}</div>
       </Link>
     );
   };
@@ -112,7 +114,6 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
                       fill
                       style={{ objectFit: "cover", borderRadius: "12px" }}
                       className="border-2"
-                      priority
                     />
                   </div>
 
@@ -120,9 +121,9 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
                 </div>
               </Link>
               <div className="flex flex-col">
-                <MenuItem name="Home" route={STUDENT_URL.HOME} />
+                <MenuItem name="navbar.home" route={STUDENT_URL.HOME} />
                 <MenuItem
-                  name="Announcement"
+                  name="navbar.student.announcement"
                   route={STUDENT_URL.ANNOUNCEMENT}
                 />
               </div>
@@ -131,9 +132,9 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
 
           {isTeacherPage && (
             <div className="flex flex-col">
-              <MenuItem name="Home" route={TEACHER_URL.HOME} />
+              <MenuItem name="navbar.home" route={TEACHER_URL.HOME} />
               <MenuItem
-                name="Ungraded Task"
+                name="navbar.ungraded_task"
                 route={TEACHER_URL.UNGRADED_TASK}
               />
             </div>

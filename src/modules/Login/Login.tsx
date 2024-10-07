@@ -12,8 +12,11 @@ import { postLogin } from "@/client/login";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { FORGOT_PASSWORD_URL } from "@/libs/constant";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
+
   const {
     control,
     handleSubmit,
@@ -41,10 +44,10 @@ const Login = () => {
         }
       })
       .catch((e) => {
-        if(typeof e.response === 'undefined'){
-          setErrorMessage("Failed to connect to server");
+        if (typeof e.response === "undefined") {
+          setErrorMessage("login.error_server");
         } else {
-          setErrorMessage(e.response.data.message);
+          setErrorMessage("login.error");
         }
       })
       .finally(() => {
@@ -63,17 +66,19 @@ const Login = () => {
       className="flex flex-col items-center gap-4 "
       style={{ width: "100%", maxWidth: "400px" }}
     >
-      <h1 className="text-4xl font-medium">Login</h1>
+      <h1 className="text-4xl font-medium">{t("login.title")}</h1>
       <Controller
         control={control}
         name="username"
         render={({ field }) => (
           <TextField
             id="outlined-basic"
-            label="Username / Email"
+            label={t("common.username_email")}
             variant="outlined"
-            error={errors.username != null}
-            helperText={errors.username?.message ?? ""}
+            error={!!errors.username}
+            helperText={
+              errors.username?.message ? t(errors.username.message) : ""
+            }
             {...field}
             fullWidth
           />
@@ -87,11 +92,13 @@ const Login = () => {
           <TextField
             fullWidth
             id="outlined-basic"
-            label="Password"
+            label={t("common.password")}
             variant="outlined"
             type={showPassword ? "text" : "password"}
             error={!!errors.password}
-            helperText={errors.password?.message ?? ""}
+            helperText={
+              errors.password?.message ? t(errors.password.message) : ""
+            }
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -110,11 +117,11 @@ const Login = () => {
         )}
       />
 
-      <p style={{ color: "#d32f2f" }}>{errorMessage}</p>
-      <Link href={FORGOT_PASSWORD_URL}> 
-        <p style={{ color: "#a1a1a1" }}>Forgot password?</p>
+      <p style={{ color: "#d32f2f" }}>{t(errorMessage)}</p>
+      <Link href={FORGOT_PASSWORD_URL}>
+        <p style={{ color: "#a1a1a1" }}>{t("common.forgot_password")}</p>
       </Link>
-      
+
       <Button
         variant="contained"
         onClick={onSubmit}
@@ -123,7 +130,7 @@ const Login = () => {
         sx={{ height: "50px", background: "black" }}
         disabled={isLoading}
       >
-        Submit
+        {t("common.submit")}
       </Button>
     </div>
   );

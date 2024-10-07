@@ -7,6 +7,7 @@ import Link from "next/link";
 import { TaskData, getTasks } from "@/client/student";
 import { TaskAccordion } from "./TaskAccordion";
 import { STUDENT_URL } from "@/libs/constant";
+import { useTranslation } from "react-i18next";
 
 type TaskProps = {
   params: { id: string };
@@ -33,6 +34,8 @@ export default function Task({ params }: TaskProps) {
     fetchTasks();
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
       <h1 className="text-2xl md:text-4xl mt-6 mb-8">
@@ -53,7 +56,7 @@ export default function Task({ params }: TaskProps) {
           );
         })
       ) : (
-        <p>No Task found</p>
+        <p>{t("common.no_data")}</p>
       )}
     </Layout>
   );
