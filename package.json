@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "translate": "node ./script/translate.js"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -20,6 +21,7 @@
     "chart.js": "^4.4.4",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
+    "csv-parse": "^5.5.6",
     "dayjs": "^1.11.13",
     "next": "14.2.11",
     "react": "^18",
