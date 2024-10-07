@@ -42,7 +42,7 @@ export default function Task({ params }: TaskProps) {
         <Link href={STUDENT_URL.HOME}>
           <ArrowBackOutlinedIcon fontSize="large" />
         </Link>
-        {taskType}
+        {t(taskType).toUpperCase()}
       </h1>
 
       {listTask.length > 0 ? (

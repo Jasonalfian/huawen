@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import React from "react";
 import ExamAccordion from "./ExamAccordion";
 import HomeworkAccordion from "./HomeworkAccordion";
+import { useTranslation } from "react-i18next";
 
 type SubmissionProps = {
   params: { id: string };
@@ -27,9 +28,12 @@ const Submission = ({ params }: SubmissionProps) => {
   React.useEffect(() => {
     fetchSubmissions();
   }, []);
+
+  const { t } = useTranslation();
+
   return (
     <Layout>
-      <h1 className="text-4xl my-6">Task Submission</h1>
+      <h1 className="text-4xl my-6">{t("task.submission")}</h1>
       {listSubmission.length > 0 ? (
         <div className="space-y-4">
           {listSubmission.map((submission) => {
@@ -49,7 +53,7 @@ const Submission = ({ params }: SubmissionProps) => {
           })}
         </div>
       ) : (
-        <p>No Submission submitted</p>
+        <p>{t("common.no_data")}</p>
       )}
     </Layout>
   );

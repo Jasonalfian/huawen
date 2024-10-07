@@ -28,6 +28,7 @@ import {
 import toast from "react-hot-toast";
 import * as yup from "yup";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useTranslation } from "react-i18next";
 
 type ExamAccordionProps = {
   submission: SubmssionData;
@@ -58,9 +59,9 @@ const schema = yup.object().shape({
         .transform((value, originalValue) => {
           return originalValue === "" ? null : value;
         })
-        .typeError("Score must be a number")
-        .min(1, "Score must be at least 1")
-        .max(100, "Score cannot be more than 100")
+        .typeError("task.score_number_error")
+        .min(1, "task.score_minimum")
+        .max(100, "task.score_maximum")
         .nullable(),
     })
   ),
@@ -127,8 +128,10 @@ const ExamAccordion = ({
     defaultAspects.map((aspect) => ({ aspect, score: "" }))
   );
 
+  const { t } = useTranslation();
+
   const addAspect = () => {
-    const newAspect = prompt("Enter new aspect:");
+    const newAspect = prompt(`${t("exam.new_aspect")}:`);
     if (
       newAspect &&
       !sortedAspects.some((aspect) => aspect.aspect === newAspect)
@@ -147,8 +150,6 @@ const ExamAccordion = ({
   const handleRemoveAspect = (index: number) => {
     const currentScores = getValues("scores");
     // Remove the score at the given index
-
-    console.log(currentScores);
     if (currentScores) {
       const updatedScores = currentScores.filter((_, i) => i !== index);
       setValue("scores", updatedScores);
@@ -161,8 +162,6 @@ const ExamAccordion = ({
 
   // Define the submit handler with proper typing
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log("Submitted data:", data);
-
     setIsLoading(true);
     let attachmentUrl = data.feedback_attachment_url;
 
@@ -188,12 +187,12 @@ const ExamAccordion = ({
 
     gradeSubmission(submission.task_id, submitPayload)
       .then(() => {
-        toast.success("Grade submitted");
+        toast.success(t("common.success_submit"));
         setFile(null);
         fetchSubmissions();
       })
       .catch((res) => {
-        toast.error(res.response.data.message ?? "Failed submit grade");
+        toast.error(res.response.data.message ?? t("common.fail_submit"));
       })
       .finally(() => {
         setIsLoading(false);
@@ -202,7 +201,7 @@ const ExamAccordion = ({
 
   // Define the error handler with proper typing
   const onError: SubmitErrorHandler<FormValues> = (errors) => {
-    toast.error("Please fix the errors");
+    toast.error(t("error.please_fix"));
   };
 
   const calculateAverageScore = () => {
@@ -233,12 +232,17 @@ const ExamAccordion = ({
       </AccordionSummary>
       <AccordionDetails>
         <div>
-          <p>Created at: {submission.submission_created_at}</p>
-          <p>Updated at: {submission.submission_updated_at}</p>
-          <p className="mt-2">
-            Description: {submission.submission_description ?? "-"}
+          <p>
+            {t("task.created_at")}: {submission.submission_created_at}
           </p>
-          <p>File Url:</p>
+          <p>
+            {t("task.updated_at")}: {submission.submission_updated_at}
+          </p>
+          <p className="mt-2">
+            {t("common.description")}:{" "}
+            {submission.submission_description ?? "-"}
+          </p>
+          <p>{t("task.file_url")}:</p>
 
           {submission.file_url &&
             submission.file_url.split(";").map((url, index) => {
@@ -257,7 +261,7 @@ const ExamAccordion = ({
         </div>
 
         <div className="mt-8">
-          <h2 className="text-xl font-medium mb-4">Score</h2>
+          <h2 className="text-xl font-medium mb-4">{t("task.score")}</h2>
           <Controller
             control={control}
             name="feedback_text"
@@ -267,7 +271,7 @@ const ExamAccordion = ({
                 multiline
                 rows={2}
                 fullWidth
-                label="Feedback"
+                label={t("task.feedback")}
                 {...field}
                 value={field.value ?? ""}
               />
@@ -285,13 +289,17 @@ const ExamAccordion = ({
                     render={({ field }) => (
                       <>
                         <TextField
-                          label={aspect.aspect}
+                          label={
+                            aspect.aspect ? t(aspect.aspect) : aspect.aspect
+                          }
                           type="number"
                           fullWidth
                           {...field}
                           error={errors?.scores?.[index]?.score != null}
                           helperText={
-                            errors?.scores?.[index]?.score?.message ?? ""
+                            errors?.scores?.[index]?.score?.message
+                              ? t(errors?.scores?.[index]?.score?.message ?? "")
+                              : ""
                           }
                         />
                       </>
@@ -310,12 +318,14 @@ const ExamAccordion = ({
                 </div>
               ))}
 
-              <Button onClick={addAspect}>Add Aspect</Button>
+              <Button onClick={addAspect}>{t("task.add_aspect")}</Button>
             </div>
             <div className="w-[50%] space-y-2">
-              <h1>Final Score: {calculateAverageScore()}</h1>
+              <h1>
+                {t("task.final_score")}: {calculateAverageScore()}
+              </h1>
 
-              <InputLabel>Feedback File</InputLabel>
+              <InputLabel>{t("task.feedback_file")}</InputLabel>
               <FilePicker
                 accept={ACCEPT_FILE}
                 multiple={false}
@@ -361,7 +371,7 @@ const ExamAccordion = ({
                   onClick={handleSubmit(onSubmit, onError)}
                   disabled={isLoading}
                 >
-                  Save
+                  {t("common.save")}
                 </Button>
               </div>
             </div>

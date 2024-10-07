@@ -36,6 +36,7 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 type TaskProps = {
   params: { id: string };
@@ -59,6 +60,7 @@ const TaskPage = ({ params }: TaskProps) => {
   const [file, setFile] = React.useState<File | null>(null);
   const [fileUrl, setFileUrl] = React.useState<UploadFileData | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const { t } = useTranslation();
 
   //Edit data
   const [taskId, setTaskId] = React.useState("");
@@ -114,12 +116,12 @@ const TaskPage = ({ params }: TaskProps) => {
       taskId
     )
       .then(() => {
-        toast.success("Task updated");
+        toast.success(t("common.success_submit"));
         fetchTasks();
         handleClose();
       })
       .catch(() => {
-        toast.error("Failed updating task");
+        toast.error(t("common.fail_submit"));
       })
       .finally(() => {
         setIsLoading(false);
@@ -159,18 +161,18 @@ const TaskPage = ({ params }: TaskProps) => {
 
         createTask(taskPayload)
           .then(() => {
-            toast.success("Success create task");
+            toast.success(t("common.success_submit"));
             fetchTasks();
             handleClose();
           })
           .catch((res) => {
-            toast.error(res.data.message ?? "Failed creating material");
+            toast.error(res.data.message ?? t("common.fail_submit"));
           })
           .finally(() => {
             setIsLoading(false);
           });
       } else {
-        toast.error(uploadRes.data.message ?? "Failed uploading file");
+        toast.error(uploadRes.data.message ?? t("common.fail_submit"));
         setIsLoading(false);
       }
     }
@@ -196,7 +198,7 @@ const TaskPage = ({ params }: TaskProps) => {
   return (
     <Layout>
       <div className="flex justify-between items-center">
-        <h1 className="text-4xl my-6">Class Task</h1>
+        <h1 className="text-4xl my-6">{t("task.class")}</h1>
         <Button
           sx={{
             background: "black",
@@ -205,7 +207,7 @@ const TaskPage = ({ params }: TaskProps) => {
           variant="contained"
           onClick={handleOpen}
         >
-          Create +
+          {t("common.create")} +
         </Button>
       </div>
       <div className="space-y-4">
@@ -241,7 +243,7 @@ const TaskPage = ({ params }: TaskProps) => {
                             onSelectTask(task);
                           }}
                         >
-                          Detail
+                          {t("common.detail")}
                         </Button>
 
                         <Link
@@ -255,7 +257,7 @@ const TaskPage = ({ params }: TaskProps) => {
                             }}
                             variant="contained"
                           >
-                            Submission
+                            {t("task.submission")}
                           </Button>
                         </Link>
                       </div>
@@ -266,7 +268,7 @@ const TaskPage = ({ params }: TaskProps) => {
             );
           })
         ) : (
-          <p>No Task found</p>
+          <p>{t("common.no_data")}</p>
         )}
       </div>
 
@@ -286,7 +288,9 @@ const TaskPage = ({ params }: TaskProps) => {
             <Close />
           </IconButton>
           <div className="flex flex-col gap-4 ">
-            <InputLabel id="demo-simple-select-label">Task Type</InputLabel>
+            <InputLabel id="demo-simple-select-label">
+              {t("task.type")}
+            </InputLabel>
             <Controller
               control={control}
               name="task_type"
@@ -298,8 +302,8 @@ const TaskPage = ({ params }: TaskProps) => {
                     field.onChange(e.target.value);
                   }}
                 >
-                  <MenuItem value={"HOMEWORK"}>Homework</MenuItem>
-                  <MenuItem value={"EXAM"}>Exam</MenuItem>
+                  <MenuItem value={"HOMEWORK"}>{t("task.homework")}</MenuItem>
+                  <MenuItem value={"EXAM"}>{t("task.exam")}</MenuItem>
                 </Select>
               )}
             />
@@ -309,11 +313,13 @@ const TaskPage = ({ params }: TaskProps) => {
               name="title"
               render={({ field }) => (
                 <TextField
-                  label="Title"
+                  label={t("common.title")}
                   id="outlined-basic"
                   variant="outlined"
-                  error={errors.title != null}
-                  helperText={errors.title?.message ?? ""}
+                  error={!!errors.title}
+                  helperText={
+                    errors.title?.message ? t(errors.title?.message) : ""
+                  }
                   {...field}
                   fullWidth
                 />
@@ -325,11 +331,15 @@ const TaskPage = ({ params }: TaskProps) => {
               name="instruction"
               render={({ field }) => (
                 <TextField
-                  label="Instruction"
+                  label={t("task.instruction")}
                   id="outlined-basic"
                   variant="outlined"
-                  error={errors.instruction != null}
-                  helperText={errors.instruction?.message ?? ""}
+                  error={!!errors.instruction}
+                  helperText={
+                    errors.instruction?.message
+                      ? t(errors.instruction?.message)
+                      : ""
+                  }
                   {...field}
                   fullWidth
                 />
@@ -352,7 +362,7 @@ const TaskPage = ({ params }: TaskProps) => {
                   )}
                 />
               }
-              label="Visible"
+              label={t("task.visible")}
             />
 
             <Controller
@@ -361,7 +371,7 @@ const TaskPage = ({ params }: TaskProps) => {
               render={({ field }) => (
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <InputLabel id="demo-simple-select-label">
-                    Deadline
+                    {t("task.deadline")}
                   </InputLabel>
                   <DateTimePicker
                     value={field.value ? dayjs(field.value) : null}
@@ -374,7 +384,9 @@ const TaskPage = ({ params }: TaskProps) => {
                 </LocalizationProvider>
               )}
             />
-            <p style={{ color: "#d32f2f" }}>{errors.deadline?.message}</p>
+            <p style={{ color: "#d32f2f" }}>
+              {errors.deadline?.message ? t(errors.deadline?.message) : ""}
+            </p>
 
             <FilePicker
               accept={ACCEPT_FILE}
@@ -415,7 +427,7 @@ const TaskPage = ({ params }: TaskProps) => {
               variant="contained"
               disabled={(file === null && !fileUrl?.url) || isLoading}
             >
-              Submit
+              {t("common.submit")}
             </Button>
           </div>
         </Box>

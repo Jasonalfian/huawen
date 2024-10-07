@@ -7,6 +7,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import useGlobalStore from "@/libs/global";
 import { ROLE_STUDENT, STUDENT_URL } from "@/libs/constant";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 type RightBarProps = {
   hideAccount?: boolean;
@@ -32,28 +33,35 @@ const RightBar = (props: RightBarProps) => {
 
   const { updateLanguage } = useGlobalStore();
 
-  const [open, setOpen] = React.useState(false);
-
-  const handleTooltipClose = () => {
-    setOpen(false);
+  const [languageOpen, setLanguageOpen] = React.useState(false);
+  const handleLanguageClose = () => {
+    setLanguageOpen(false);
   };
-
-  const handleClick = () => {
-    // Toggle the tooltip on click
-    setOpen(!open);
+  const handleLanguageOpen = () => {
+    setLanguageOpen(!languageOpen);
   };
 
   const selectLanguage = (lang: string) => {
     updateLanguage(lang);
-    handleTooltipClose();
+    handleLanguageClose();
   };
+
+  const [profileOpen, setProfileOpen] = React.useState(false);
+  const handleProfileClose = () => {
+    setProfileOpen(false);
+  };
+  const handleProfileOpen = () => {
+    setProfileOpen(!languageOpen);
+  };
+
+  const { t } = useTranslation();
 
   return (
     <div className="space-x-2">
       <HtmlTooltip
-        open={open}
-        onClose={handleTooltipClose}
-        onClick={handleClick}
+        open={languageOpen}
+        onClose={handleLanguageClose}
+        onClick={handleLanguageOpen}
         placement={hideAccount ? "bottom-start" : "bottom"}
         title={
           <React.Fragment>
@@ -96,6 +104,9 @@ const RightBar = (props: RightBarProps) => {
       </HtmlTooltip>
       {!hideAccount && (
         <HtmlTooltip
+          open={profileOpen}
+          onClose={handleProfileClose}
+          onClick={handleProfileOpen}
           placement="bottom-start"
           title={
             <React.Fragment>
@@ -103,15 +114,19 @@ const RightBar = (props: RightBarProps) => {
                 {isStudentPage && (
                   <>
                     <Link href={STUDENT_URL.PROFILE}>
-                      <p className="p-2 border-b-2">Student Information</p>
+                      <p className="p-2 border-b-2">
+                        {t("account.student_info")}
+                      </p>
                     </Link>
                     <Link href={STUDENT_URL.CERTIFICATE}>
-                      <p className="p-2 border-b-2">My Certificate</p>
+                      <p className="p-2 border-b-2">
+                        {t("account.my_certificate")}
+                      </p>
                     </Link>
                   </>
                 )}
                 <div onClick={logout}>
-                  <p className="p-2">Sign Out</p>
+                  <p className="p-2">{t("common.sign_out")}</p>
                 </div>
               </div>
             </React.Fragment>

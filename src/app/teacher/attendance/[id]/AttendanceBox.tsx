@@ -23,6 +23,7 @@ import {
 import React from "react";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 type AttendanceProps = {
   attendance: AttendanceData;
@@ -32,6 +33,7 @@ type AttendanceProps = {
 const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
   const [open, setOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const { t } = useTranslation();
   const handleOpen = () => {
     setOpen(true);
   };
@@ -64,12 +66,12 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
 
     updateStudentAttendance(attendance.lesson_id, data)
       .then(() => {
-        toast.success("Edited successfully");
+        toast.success(t("common.success_submit"));
         refetchData();
         handleClose();
       })
       .catch((res) => {
-        toast.error(res.response.data.message ?? "Failed to edit");
+        toast.error(res.response.data.message ?? t("common.fail_submit"));
       })
       .finally(() => {
         setIsLoading(false);
@@ -135,7 +137,6 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
           fill
           style={{ objectFit: "cover", borderRadius: "12px" }}
           className="border-2"
-          priority
         />
       </div>
 
@@ -150,7 +151,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
               }}
             />
           }
-          label="Attend"
+          label={t("common.attend")}
         />
 
         <Button
@@ -158,7 +159,7 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
           variant="outlined"
           onClick={handleOpen}
         >
-          Evaluation
+          {t("common.evaluation")}
         </Button>
       </div>
 

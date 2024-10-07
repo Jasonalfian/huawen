@@ -11,6 +11,7 @@ import Layout from "@/components/layout";
 import { IconButton, InputAdornment } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { ROOT } from "@/libs/constant";
+import { useTranslation } from "react-i18next";
 
 type ResetProps = {
   params: { token: string };
@@ -46,7 +47,7 @@ export default function Reset({ params }: ResetProps) {
       })
       .catch((e) => {
         if (typeof e.response === "undefined") {
-          setErrorMessage("Failed to connect to server");
+          setErrorMessage(t("login.error_server"));
         } else {
           setErrorMessage(e.response.data.message);
         }
@@ -58,6 +59,7 @@ export default function Reset({ params }: ResetProps) {
 
   const [errorMessage, setErrorMessage] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const { t } = useTranslation();
 
   // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword((prev) => !prev);
@@ -72,8 +74,11 @@ export default function Reset({ params }: ResetProps) {
           className="flex flex-col items-center gap-4 "
           style={{ width: "100%", maxWidth: "400px" }}
         >
-          <h1 className="text-4xl font-medium">Reset Password</h1>
-          <p>Reset password for: {decodeHTML(params.token.split(".")[0])}</p>
+          <h1 className="text-4xl font-medium">{t("token.reset_password")}</h1>
+          <p>
+            {t("token.reset_password_for")}:{" "}
+            {decodeHTML(params.token.split(".")[0])}
+          </p>
           <Controller
             control={control}
             name="password"
@@ -81,7 +86,7 @@ export default function Reset({ params }: ResetProps) {
               <TextField
                 fullWidth
                 id="outlined-basic"
-                label="New Password"
+                label={t("token.new_password")}
                 variant="outlined"
                 type={showPassword ? "text" : "password"}
                 error={!!errors.password}
@@ -114,7 +119,7 @@ export default function Reset({ params }: ResetProps) {
             sx={{ height: "50px", background: "black" }}
             disabled={isLoading}
           >
-            Submit
+            {t("common.save")}
           </Button>
         </div>
       </div>

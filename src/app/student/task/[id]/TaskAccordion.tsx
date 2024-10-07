@@ -59,6 +59,8 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { t } = useTranslation();
 
+  const taskTypeLabel = t(task.task_type);
+
   dayjs.extend(utc);
   dayjs.extend(timezone);
 
@@ -193,7 +195,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
           </div>
 
           <div>
-            <h2 className="text-xl mb-2 font-bold"> • {task.task_type}</h2>
+            <h2 className="text-xl mb-2 font-bold"> • {taskTypeLabel}</h2>
             <div className="text-black p-4 border-2 bg-theme-cream rounded-lg">
               <p className="mb-2">{task.instruction}</p>
 
@@ -214,7 +216,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
             <div className="w-full">
               <h2 className="text-xl mb-2 font-bold">
                 {" "}
-                • {task.task_type} {t("task.submission").toUpperCase()}
+                • {taskTypeLabel} {t("task.submission")}
               </h2>
               <TextField
                 id="outlined-basic"
@@ -287,7 +289,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
 
             <div className="w-full">
               <h2 className="text-xl mb-2 font-bold">
-                • {task.task_type} {t("task.feedback").toUpperCase()}
+                • {taskTypeLabel} {t("task.feedback")}
               </h2>
 
               <div className="text-black p-4 border-2 bg-theme-cream rounded-lg mb-4">
@@ -313,7 +315,7 @@ export const TaskAccordion = ({ task, refetchTask }: TaskAccordionProps) => {
                     sx={{
                       fontSize: "16px",
                     }}
-                    label={`Final Score: ${finalScore}`}
+                    label={`${t("task.final_score")}: ${finalScore}`}
                   />
                 </div>
               )}

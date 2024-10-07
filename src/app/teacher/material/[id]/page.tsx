@@ -27,6 +27,7 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import Link from "next/link";
 import React from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 type MaterialProps = {
   params: { id: string };
@@ -82,6 +83,9 @@ const Material = ({ params }: MaterialProps) => {
     setMeta("");
     setOpen(false);
   };
+
+  const { t } = useTranslation();
+
   const doEditMaterial = (fileRes: UploadFileData) => {
     editMaterial(
       {
@@ -92,12 +96,12 @@ const Material = ({ params }: MaterialProps) => {
       materialId
     )
       .then(() => {
-        toast.success("Material updated");
+        toast.success(t("common.success_submit"));
         fetchMaterials();
         handleClose();
       })
       .catch(() => {
-        toast.error("Failed updating material");
+        toast.error(t("common.fail_submit"));
       })
       .finally(() => {
         setIsLoading(false);
@@ -109,14 +113,14 @@ const Material = ({ params }: MaterialProps) => {
     if (selectedMaterial) {
       removeMaterial(selectedMaterial?.material_id)
         .then(() => {
-          toast.success("Material removed");
+          toast.success(t("common.success_submit"));
           fetchMaterials();
         })
         .catch((res) => {
           if (res.response) {
             toast.error(res.response.data.message);
           } else {
-            toast.error("Failed removing material");
+            toast.error(t("common.fail_submit"));
           }
         })
         .finally(() => {
@@ -153,12 +157,12 @@ const Material = ({ params }: MaterialProps) => {
             description,
           })
             .then(() => {
-              toast.success("Material Created");
+              toast.success(t("common.success_submit"));
               fetchMaterials();
               handleClose();
             })
             .catch(() => {
-              toast.error("Failed creating material");
+              toast.success(t("common.fail_submit"));
             })
             .finally(() => {
               setIsLoading(false);
@@ -167,7 +171,7 @@ const Material = ({ params }: MaterialProps) => {
       })
       .catch((res) => {
         if (res.response.data) {
-          toast.error(res.response.data.message ?? "Failed uploading file");
+          toast.error(res.response.data.message ?? t("common.fail_submit"));
         }
       })
       .finally(() => {
@@ -180,7 +184,7 @@ const Material = ({ params }: MaterialProps) => {
       <div>
         <div className="className=mt-2"></div>
         <div className="flex justify-between items-center">
-          <h1 className="text-4xl my-6">Class Materials</h1>
+          <h1 className="text-4xl my-6">{t("lesson.card.material")}</h1>
           <Button
             sx={{
               borderColor: "black",
@@ -191,7 +195,7 @@ const Material = ({ params }: MaterialProps) => {
             variant="outlined"
             onClick={handleOpen}
           >
-            Create +
+            {t("common.create")} +
           </Button>
         </div>
 
@@ -229,7 +233,7 @@ const Material = ({ params }: MaterialProps) => {
                               handleOpenRemove(material);
                             }}
                           >
-                            Remove
+                            {t("common.remove")}
                           </Button>
 
                           <Button
@@ -246,7 +250,7 @@ const Material = ({ params }: MaterialProps) => {
                               setSubmitUrl(material.link);
                             }}
                           >
-                            Detail
+                            {t("common.detail")}
                           </Button>
                         </div>
                       </div>
@@ -257,7 +261,7 @@ const Material = ({ params }: MaterialProps) => {
               );
             })
           ) : (
-            <p>No materials found</p>
+            <p>{t("common.no_data")}</p>
           )}
         </div>
       </div>
@@ -272,7 +276,7 @@ const Material = ({ params }: MaterialProps) => {
           <div className="flex flex-col justify-center">
             <div className="flex text-center justify-center">
               <h2>
-                Are you sure you want to remove
+                {t("material.remove_confirmation")}
                 <br />
                 <span className="font-bold">
                   {selectedMaterial?.description}
@@ -286,14 +290,14 @@ const Material = ({ params }: MaterialProps) => {
                 sx={{ background: "black" }}
                 variant="contained"
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
               <Button
                 onClick={doRemoveMaterial}
                 sx={{ background: "maroon" }}
                 variant="contained"
               >
-                Yes
+                {t("common.yes")}
               </Button>
             </div>
           </div>
@@ -317,7 +321,7 @@ const Material = ({ params }: MaterialProps) => {
           <div className="flex flex-col gap-4 ">
             <TextField
               id="outlined-basic"
-              label="description"
+              label={t("common.description")}
               variant="outlined"
               value={description}
               multiline
@@ -366,7 +370,7 @@ const Material = ({ params }: MaterialProps) => {
                 (file === null && !submitUrl) || isLoading || !description
               }
             >
-              Submit
+              {t("common.submit")}
             </Button>
           </div>
         </Box>

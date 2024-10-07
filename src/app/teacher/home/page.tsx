@@ -27,6 +27,7 @@ import { Controller, useForm } from "react-hook-form";
 import { lessonFormSchema } from "./schema";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const Home = () => {
   const DEFAULT_FORM_VALUE = {
@@ -87,7 +88,6 @@ const Home = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
-
     const editLessonRes = await editLessonInfo(data);
 
     if (data.recording_link) {
@@ -97,12 +97,10 @@ const Home = () => {
       );
 
       if (editZoomRecordingRes.data) {
-        toast.success("Success update recording");
+        toast.success(t("common.success_submit"));
         handleClose();
       } else {
-        toast.error(
-          editLessonRes.data.message ?? "Error in updating recording"
-        );
+        toast.error(editLessonRes.data.message ?? t("common.fail_submit"));
       }
     }
     if (data.zoom_link) {
@@ -112,25 +110,25 @@ const Home = () => {
       );
 
       if (editZoomInfoRes.data) {
-        toast.success("Success update zoom link");
+        toast.success(t("common.success_submit"));
         handleClose();
       } else {
-        toast.error(
-          editLessonRes.data.message ?? "Error in updating zoom link"
-        );
+        toast.error(editLessonRes.data.message ?? t("common.fail_submit"));
       }
     }
 
     if (editLessonRes.data) {
-      toast.success("Success update lesson");
+      toast.success(t("common.success_submit"));
       handleClose();
     } else {
-      toast.error("Error in updating lesson");
+      toast.error(t("common.fail_submit"));
     }
 
     fetchLessons();
     handleClose();
   });
+
+  const { t } = useTranslation();
 
   return (
     <Layout>
@@ -148,7 +146,7 @@ const Home = () => {
             );
           })
         ) : (
-          <p>No lessons found</p>
+          <p>{t("common.no_data")}</p>
         )}
 
         <Modal
@@ -172,10 +170,14 @@ const Home = () => {
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    label="Lesson name"
+                    label={t("lesson.name")}
                     variant="outlined"
-                    error={!!errors.description}
-                    helperText={errors.description?.message ?? ""}
+                    error={!!errors.lesson_name}
+                    helperText={
+                      errors.lesson_name?.message
+                        ? t(errors.lesson_name.message)
+                        : ""
+                    }
                     {...field}
                     fullWidth
                   />
@@ -186,10 +188,14 @@ const Home = () => {
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    label="Description"
+                    label={t("common.description")}
                     variant="outlined"
                     error={!!errors.description}
-                    helperText={errors.description?.message ?? ""}
+                    helperText={
+                      errors.description?.message
+                        ? t(errors.description.message)
+                        : ""
+                    }
                     {...field}
                     fullWidth
                     multiline
@@ -201,7 +207,7 @@ const Home = () => {
               <div className="flex gap-2">
                 <div>
                   <InputLabel id="demo-simple-select-label">
-                    Start Time
+                    {t("lesson.start_time")}
                   </InputLabel>
 
                   <Controller
@@ -226,7 +232,7 @@ const Home = () => {
                 </div>
                 <div>
                   <InputLabel id="demo-simple-select-label">
-                    End Time
+                    {t("lesson.end_time")}
                   </InputLabel>
                   <Controller
                     name="end_time"
@@ -255,10 +261,14 @@ const Home = () => {
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    label="Zoom link"
+                    label={t("lesson.zoom_link")}
                     variant="outlined"
                     error={!!errors.zoom_link}
-                    helperText={errors.zoom_link?.message ?? ""}
+                    helperText={
+                      errors.zoom_link?.message
+                        ? t(errors.zoom_link.message)
+                        : ""
+                    }
                     {...field}
                     fullWidth
                   />
@@ -270,10 +280,14 @@ const Home = () => {
                 control={control}
                 render={({ field }) => (
                   <TextField
-                    label="Recording link"
+                    label={t("lesson.recording_link")}
                     variant="outlined"
                     error={!!errors.recording_link}
-                    helperText={errors.recording_link?.message ?? ""}
+                    helperText={
+                      errors.recording_link?.message
+                        ? t(errors.recording_link.message)
+                        : ""
+                    }
                     {...field}
                     fullWidth
                   />
@@ -289,7 +303,7 @@ const Home = () => {
                 variant="contained"
                 sx={{ backgroundColor: "black" }}
               >
-                Save
+                {t("common.save")}
               </Button>
             </div>
           </Box>

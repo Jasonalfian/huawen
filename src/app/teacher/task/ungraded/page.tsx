@@ -5,6 +5,7 @@ import Layout from "@/components/layout";
 import React from "react";
 import HomeworkAccordion from "./HomeworkAccordion";
 import ExamAccordion from "./ExamAccordion";
+import { useTranslation } from "react-i18next";
 
 const UngradedSubmission = () => {
   const [listUngraded, setListUngraded] = React.useState<UngradedTaskData[]>(
@@ -23,9 +24,11 @@ const UngradedSubmission = () => {
     fetchUngradedTask();
   }, []);
 
+  const { t } = useTranslation();
+
   return (
     <Layout>
-      <h1 className="text-3xl my-6">Ungraded Task Submission</h1>
+      <h1 className="text-3xl my-6">{t("ungraded.title")}</h1>
       {listUngraded.length > 0 ? (
         <div className="space-y-4">
           {listUngraded.map((task, index) => {
@@ -45,7 +48,7 @@ const UngradedSubmission = () => {
           })}
         </div>
       ) : (
-        <p>No Ungraded task found</p>
+        <p>{t("common.no_data")}</p>
       )}
     </Layout>
   );

@@ -42,7 +42,7 @@ const LessonCard = ({ data }: LessonCardProps) => {
             }}
             variant="contained"
           >
-            {t("common.submit")} {data.task_type ?? ""}{" "}
+            {t("common.submit")} {data.task_type ? t(data.task_type) : ""}{" "}
             {needAttention && <PriorityHigh />}
           </Button>
         </Link>
