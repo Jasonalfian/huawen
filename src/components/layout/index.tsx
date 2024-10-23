@@ -25,19 +25,18 @@ export default function Layout({
       <Head>
         <title>{titleConcat}</title>
       </Head>
-      <div className="min-h-screen">
-        <div className="flex">
-          <NavbarMobile isLandingPage={isLandingPage} setter={setShowSidebar} />
-          <Navbar
-            isLandingPage={isLandingPage}
-            show={showSidebar}
-            setter={setShowSidebar}
-          />
-          <div className="flex flex-col flex-grow w-screen md:w-full min-h-screen">
-            <div className="relative flex flex-col mt-[80px] p-6">
-              {children}
-            </div>
-          </div>
+      <div className="min-h-screen flex">
+        {/* Sidebar */}
+        <NavbarMobile isLandingPage={isLandingPage} setter={setShowSidebar} />
+        <Navbar
+          isLandingPage={isLandingPage}
+          show={showSidebar}
+          setter={setShowSidebar}
+        />
+
+        {/* Main Content */}
+        <div className="flex flex-col flex-grow min-h-screen md:ml-[250px] overflow-y-auto">
+          <div className="relative flex flex-col mt-[80px] p-6">{children}</div>
         </div>
       </div>
     </>

@@ -31,8 +31,20 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
   const isTeacherPage = pathname.includes(ROLE_TEACHER.toLowerCase());
 
   // Define our base class
-  const className =
-    "mt-0 md:mt-[var(--header-height)] bg-white w-[250px] transition-[margin-left] ease-in-out duration-500 md:static top-100 bottom-0 left-0 z-40 border-r-2";
+  const className = `
+    mt-0 md:mt-[var(--header-height)]
+    bg-white
+    w-[250px]
+    fixed // Fixed position for the sidebar
+    top-0
+    left-0
+    bottom-0 // Make sure it goes to the bottom
+    z-40
+    border-r-2
+    overflow-y-auto // Allows scrolling within the sidebar if needed
+    transition-[margin-left]
+    ease-in-out duration-500
+  `;
   // Append class based on state of sidebar visiblity
   const appendClass = show ? " ml-0" : " ml-[-250px] md:ml-0";
 
