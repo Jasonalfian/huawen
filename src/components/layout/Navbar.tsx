@@ -93,12 +93,12 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
           }
         >
           <Image
-            src="/img/huawen-logo.png"
+            src="/img/huawen-logo.webp"
             alt="Company Logo"
             width={120}
             height={120}
             priority
-            style={{ height: "auto", width: "auto" }}
+            style={{ height: "auto", width: "auto", background: "white" }}
           />
         </Link>
         <RightBar hideAccount={isLandingPage} />
@@ -111,21 +111,27 @@ export default function Navbar({ show, setter, isLandingPage }: NavbarProps) {
                 <div className="flex flex-col justify-center items-center my-4 border-B-2">
                   <div
                     style={{
-                      width: "200px",
+                      width: "100%",
                       height: "200px",
                       position: "relative",
+                      overflow: "hidden",
                     }}
                   >
-                    <Image
+                    <img
                       src={
                         profilePicUrl
                           ? profilePicUrl
                           : "/img/blank-profile.jpeg"
                       }
                       alt="Display Picture"
-                      fill
-                      style={{ objectFit: "cover", borderRadius: "12px" }}
-                      className="border-2"
+                      style={{
+                        objectFit: "cover",
+                        borderRadius: "12px",
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
+                        padding: "8px",
+                      }}
                     />
                   </div>
 

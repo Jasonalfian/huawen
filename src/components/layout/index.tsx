@@ -35,7 +35,11 @@ export default function Layout({
         />
 
         {/* Main Content */}
-        <div className="flex flex-col flex-grow min-h-screen md:ml-[250px] overflow-y-auto">
+        <div
+          className={`flex flex-col flex-grow min-h-screen ${
+            !isLandingPage && "md:ml-[250px]"
+          } overflow-y-auto`}
+        >
           <div className="relative flex flex-col mt-[80px] p-6">{children}</div>
         </div>
       </div>

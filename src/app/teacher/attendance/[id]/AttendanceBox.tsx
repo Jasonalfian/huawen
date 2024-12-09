@@ -122,21 +122,26 @@ const AttendanceBox = ({ attendance, refetchData }: AttendanceProps) => {
       <p className="text-xl font-medium mb-4">{attendance.name}</p>
       <div
         style={{
-          width: "200px",
+          width: "100%",
           height: "200px",
           position: "relative",
+          overflow: "hidden",
         }}
       >
-        <Image
+        <img
           src={
             attendance.profile_picture_url
               ? attendance.profile_picture_url
               : "/img/blank-profile.jpeg"
           }
           alt="Display Picture"
-          fill
-          style={{ objectFit: "cover", borderRadius: "12px" }}
-          className="border-2"
+          style={{
+            objectFit: "cover",
+            borderRadius: "12px",
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+          }}
         />
       </div>
 

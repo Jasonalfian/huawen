@@ -141,13 +141,11 @@ const InfoPage = () => {
           </div>
           <div onClick={handleOpen}>
             {profilePicUrl ? (
-              <Image
+              <img
                 src={profilePicUrl}
                 alt="Display Picture"
-                width={350}
-                height={350}
                 className="rounded-xl"
-                style={{ height: "auto", width: "auto" }}
+                style={{ height: "auto", width: "350px" }}
               />
             ) : (
               <Button>{t("profile.add_image")}</Button>

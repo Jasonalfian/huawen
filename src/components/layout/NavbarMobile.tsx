@@ -30,7 +30,7 @@ export default function NavbarMobile({
       )}
       <Link href={isLandingPage ? ROOT : STUDENT_URL.HOME} className="mx-auto">
         <Image
-          src="/img/huawen-logo.png"
+          src="/img/huawen-logo.webp"
           alt="Company Logo"
           width={120}
           height={120}
