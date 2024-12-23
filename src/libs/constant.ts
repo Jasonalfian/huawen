@@ -7,7 +7,6 @@ export const STUDENT_URL = {
   CERTIFICATE: "/student/certificate",
   ANNOUNCEMENT: "/student/announcement",
 };
-
 export const TEACHER_URL = {
   HOME: "/teacher/home",
   MATERIAL: "/teacher/material",
