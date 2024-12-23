@@ -18,7 +18,7 @@ export const TEACHER_URL = {
 };
 
 export const ACCEPT_FILE =
-  "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png, image/gif, video/mp4, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, audio/aac";
+  "application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, image/jpeg, image/png, image/gif, video/mp4, application/pdf, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.presentationml.presentation, audio/aac, audio/mp4, audio/mpeg";
 export const ACCEPT_FILE_BIO = "image/gif, image/jpeg, image/png, image/jpg";
 export const ACCPET_FILE_EVALUATION =
   "image/gif, image/jpeg, image/png, application/pdf, image/jpg, audio/mpeg";
