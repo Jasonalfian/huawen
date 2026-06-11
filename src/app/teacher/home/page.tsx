@@ -6,10 +6,12 @@ import {
   editLessonZoom,
   getLessons,
   LessonData,
+  uploadFile,
 } from "@/client/teacher";
 import Layout from "@/components/layout";
 import LessonCard from "@/components/lesson/teacher/LessonCard";
-import { MODAL_STYLE } from "@/libs/constant";
+import FilePicker, { MB_UNIT } from "@/components/shared/FilePicker/FilePicker";
+import { ACCEPT_FILE, MODAL_STYLE } from "@/libs/constant";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Close } from "@mui/icons-material";
 import {
@@ -28,6 +30,7 @@ import { lessonFormSchema } from "./schema";
 import dayjs from "dayjs";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
 
 const Home = () => {
   const DEFAULT_FORM_VALUE = {
@@ -41,14 +44,17 @@ const Home = () => {
   };
   const [listLesson, setListLesson] = React.useState<LessonData[]>([]);
   const [open, setOpen] = React.useState(false);
+  const [file, setFile] = React.useState<File | null>(null);
 
   const handleClose = () => {
     setIsLoading(false);
     setOpen(false);
+    setFile(null);
     reset(DEFAULT_FORM_VALUE);
   };
   const handleOpen = (data: LessonData) => {
     setOpen(true);
+    setFile(null);
     reset({
       lesson_id: data.lesson_id,
       lesson_name: data.lesson_name,
@@ -77,6 +83,7 @@ const Home = () => {
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -85,15 +92,35 @@ const Home = () => {
   });
 
   const [isLoading, setIsLoading] = React.useState(false);
+  const currentRecordingLink = watch("recording_link");
 
   const onSubmit = handleSubmit(async (data) => {
     setIsLoading(true);
+
+    let finalRecordingLink = data.recording_link;
+
+    if (file !== null) {
+      try {
+        const formData = new FormData();
+        formData.append("fileToUpload", file);
+
+        const uploadRes = await uploadFile(formData);
+        if (uploadRes.data) {
+          finalRecordingLink = uploadRes.data.data.url;
+        }
+      } catch (error: any) {
+        toast.error(error.response?.data?.message ?? t("common.fail_submit"));
+        setIsLoading(false);
+        return; // Stop execution if file upload fails
+      }
+    }
+
     const editLessonRes = await editLessonInfo(data);
 
-    if (data.recording_link) {
+    if (finalRecordingLink) {
       const editZoomRecordingRes = await editLessonRecording(
         data.lesson_id,
-        data.recording_link
+        finalRecordingLink
       );
 
       if (editZoomRecordingRes.data) {
@@ -103,6 +130,7 @@ const Home = () => {
         toast.error(editLessonRes.data.message ?? t("common.fail_submit"));
       }
     }
+
     if (data.zoom_link) {
       const editZoomInfoRes = await editLessonZoom(
         data.lesson_id,
@@ -275,24 +303,42 @@ const Home = () => {
                 )}
               />
 
-              <Controller
-                name="recording_link"
-                control={control}
-                render={({ field }) => (
-                  <TextField
-                    label={t("lesson.recording_link")}
-                    variant="outlined"
-                    error={!!errors.recording_link}
-                    helperText={
-                      errors.recording_link?.message
-                        ? t(errors.recording_link.message)
-                        : ""
+              <div className="flex flex-col gap-2">
+                <InputLabel>{t("lesson.recording_link")}</InputLabel>
+                <FilePicker
+                  accept={ACCEPT_FILE}
+                  multiple={false}
+                  maxSize={20 * MB_UNIT}
+                  onFilesSubmit={(files) => {
+                    if (files.length > 0) {
+                      setFile(files[0]);
                     }
-                    {...field}
-                    fullWidth
-                  />
-                )}
-              />
+                  }}
+                />
+
+                <div>
+                  {file?.name ? (
+                    <p>{file.name}</p>
+                  ) : (
+                    currentRecordingLink && (
+                      <Link target="_blank" href={currentRecordingLink}>
+                        <Button
+                          sx={{
+                            textDecoration: "underline",
+                            textAlign: "left",
+                            textTransform: "none",
+                            whiteSpace: "normal",
+                            wordBreak: "break-word",
+                          }}
+                          variant="text"
+                        >
+                          {currentRecordingLink}
+                        </Button>
+                      </Link>
+                    )
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="flex justify-end mt-4">

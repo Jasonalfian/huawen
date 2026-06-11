@@ -66,7 +66,7 @@
   "lesson.start_time": "开始时间",
   "lesson.end_time": "结束时间",
   "lesson.zoom_link": "Zoom链接",
-  "lesson.recording_link": "录音链接",
+  "lesson.recording_link": "录音/签到链接",
   "common.create": "创建",
   "common.remove": "移除",
   "common.detail": "细节",

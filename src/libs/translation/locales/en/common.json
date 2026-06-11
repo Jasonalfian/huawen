@@ -66,7 +66,7 @@
   "lesson.start_time": "Start time",
   "lesson.end_time": "End time",
   "lesson.zoom_link": "Zoom link",
-  "lesson.recording_link": "Recording link",
+  "lesson.recording_link": "Recording/attendance link",
   "common.create": "Create",
   "common.remove": "Remove",
   "common.detail": "Detail",
