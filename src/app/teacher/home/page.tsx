@@ -115,7 +115,10 @@ const Home = () => {
       }
     }
 
-    const editLessonRes = await editLessonInfo(data);
+    const editLessonRes = await editLessonInfo({
+      ...data,
+      recording_link: data.recording_link ?? undefined,
+    });
 
     if (finalRecordingLink) {
       const editZoomRecordingRes = await editLessonRecording(
