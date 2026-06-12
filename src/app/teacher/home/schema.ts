@@ -7,7 +7,7 @@ export const lessonFormSchema = yup.object().shape({
   start_time: yup.string().required("common.required"),
   end_time: yup.string().required("common.required"),
   zoom_link: yup.string(),
-  recording_link: yup.string(),
+  recording_link: yup.string().nullable().notRequired(),
 });
 
 export type ProfileFormData = yup.InferType<typeof lessonFormSchema>;
